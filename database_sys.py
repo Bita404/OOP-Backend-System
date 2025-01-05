@@ -39,5 +39,51 @@ class DB_connection :
                 mycursor.close()
                 self.connect.close()   
                 
-class                 
+class Student :
+     def __init__():
+          pass
+     def add_stu ():
+          pass
+     def remove_stu ():
+          pass
+     def edit_stu ():
+          pass
+     def search_stu ():
+          pass
+          
+class Teacher :
+     def __init__(self):
+         pass
+     def add_t ():
+          pass
+     def remove_t ():
+          pass
+     def edit_t ():
+          pass
+     def search_t ():
+          pass
+    
+class Course : 
+     def __init__(self):
+         pass
+     def add_course ():
+          pass
+     def remove_course():
+          pass
+     def edit_course ():
+          pass
+     def search_course ():
+          pass
+class Class :
+     def __init__(self):
+          pass
+     def add_class ():
+          pass
+     def remove_class ():
+          pass
+     def edit_class ():
+          pass
+     def search_class ():
+          pass
+                  
                 
