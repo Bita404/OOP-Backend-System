@@ -37,14 +37,24 @@ class DB_connection :
         finally:
             if self.connect.is_connected():
                 mycursor.close()
-                self.connect.close()   
-                
-class Student :
-     def __init__():
+                self.connect.close()  
+                 
+class DB:
+    def __init__(self, db):
+        self.db = db
+                        
+class Student (DB):
+     def __init__(self ,db, student_id ,name , email , class_id):
+          super().__init__(db)
+          self.student_id = student_id
+          self.name = name
+          self.email = email
+          self.class_id = class_id
+
+          
+     def add_stu (self):
           pass
-     def add_stu ():
-          pass
-     def remove_stu ():
+     def remove_stu (self):
           pass
      def edit_stu ():
           pass
@@ -85,5 +95,8 @@ class Class :
           pass
      def search_class ():
           pass
+     
+class logger:
+     def __init__(self):
+          pass     
                   
-                
