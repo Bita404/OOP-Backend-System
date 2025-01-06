@@ -2,6 +2,7 @@ import mysql.connector
 import  pandas as pd
 import matplotlib.pyplot as plt
 import logging
+from datetime import datetime
 
 class DB_connection :
      def __init__(self, user, password, host, database):
@@ -39,17 +40,21 @@ class DB_connection :
                 mycursor.close()
                 self.connect.close()  
                  
-class DB:
-    def __init__(self, db):
-        self.db = db
-                        
-class Student (DB):
-     def __init__(self ,db, student_id ,name , email , class_id):
-          super().__init__(db)
-          self.student_id = student_id
+class person :
+     def __init__(self , name, email ):
           self.name = name
-          self.email = email
+          self.email = email 
+          
+     def __str__(self):
+          return f"person name:{self.name} with email: {self.email}"  
+                       
+class Student(person):
+     def __init__(self ,db, student_id ,name , grade ,  email , class_id):
+          super().__init__(name , email)
+          self.db = db
+          self.student_id = student_id
           self.class_id = class_id
+          self.grade = grade
 
           
      def add_stu (self):
@@ -61,9 +66,12 @@ class Student (DB):
      def search_stu ():
           pass
           
-class Teacher :
-     def __init__(self):
-         pass
+class Teacher (person):
+     def __init__(self ,db, teacher_id ,name , email ):
+          super().__init__(name , email)
+          self.db = db
+          self.teacher_id = teacher_id
+     
      def add_t ():
           pass
      def remove_t ():
@@ -74,7 +82,7 @@ class Teacher :
           pass
     
 class Course : 
-     def __init__(self):
+     def __init__(self ,course_id , name , teacher_id , unit ):
          pass
      def add_course ():
           pass
@@ -85,7 +93,7 @@ class Course :
      def search_course ():
           pass
 class Class :
-     def __init__(self):
+     def __init__(self , class_id , class_number ):
           pass
      def add_class ():
           pass
