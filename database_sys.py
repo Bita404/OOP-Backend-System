@@ -79,6 +79,7 @@ class Student(person):
           pass
 ######................>>>>  teacher         
 class Teacher (person):
+     teacherID_list = {}
      Last_teacherID = 1000
      def __init__(self ,db ,name , email ,age ):
           super().__init__(name , email, age)
@@ -86,6 +87,7 @@ class Teacher (person):
           self.teacher_id = Teacher.TID_gen()
           self.course_id = None
           self.class_id = None
+          Teacher.teacherID_list[self.teacher_id] = self
           
      @classmethod     
      def TID_gen(cls):
@@ -103,8 +105,20 @@ class Teacher (person):
           pass
  ######................>>>>  course    
 class Course():
-     def __init__(self, db , ):   
-         
+     course_list = {}
+     def __init__(self, db , course_name , total_hours , course_id , teacher_id):  
+          if course_id not in Course.course_list and teacher_id in Teacher.teacherID_list : 
+              self.db = db 
+              self.course_name = course_name
+              self.total_hours = total_hours 
+              self.course_id = course_id
+              Course.course_list[course_id] = self
+              self.teacher_id = teacher_id  
+          else :
+               raise ValueError("ID Error !!! This course ID might already exist OR Invalid teacher ID! ! ! ")
+            
+          
+       
      def add_course ():
           pass
      def remove_course():
