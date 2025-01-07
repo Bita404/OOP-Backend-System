@@ -5,7 +5,7 @@ from datetime import datetime
 
 ####################>>>>>>> LOG INFO FILE
 class Logger:
-    def __init__(self, log_file="commands.log"):
+    def __init__(self, log_file="System.log"):
         """ System Log maker """
         self.log_file = log_file
 
@@ -17,12 +17,13 @@ class Logger:
             
 #############>>>>>>> database connection  <<<<<<<<<<#########
 class DB_connection :
-     def __init__(self, user, password, host, database):
+     def __init__(self, user, password, host, database , logger):
         self.user = user 
         self.password = password 
         self.host = host 
         self.databse = database
         self.connect = None
+        self.logger = logger
         
      def connnection(self):
         self.connect = mysql.connector.connect(
@@ -32,20 +33,22 @@ class DB_connection :
           database = self.databse
         )   
         
-     def execute_query(self, query, data=None, 
-                      fetch=False):
+     def execute_query(self, query, data=None, fetch=False):
         try:
             self.connnection() 
             mycursor = self.connect.cursor() 
             mycursor.execute(query, data)
         except Exception as e:
             print(e)
+            self.logger.write_log("execute_query", f"Error: {e}")
         else:
             if fetch:
                 data = mycursor.fetchall()
+                self.logger.write_log("execute_query", "Query executed successfully with fetch")
                 return data
             affected_rows = mycursor.rowcount
             self.connect.commit()
+            self.logger.write_log("execute_query", f"Query executed successfully, {affected_rows} rows affected")
             return affected_rows
         finally:
             if self.connect.is_connected():
@@ -82,19 +85,30 @@ class Student(person):
         
      def add_stu (self):
           query = """
-            INSERT INTO students (student_id, name, grade, email, age, class_id, course_id)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+             INSERT INTO students (student_id, name, grade, email, age, class_id, course_id)
+             VALUES (%s, %s, %s, %s, %s, %s, %s)
           """
           data = (self.student_id, self.name, self.grade, self.email, self.age, self.class_id, self.course_id)
           self.db.execute_query(query, data)
-          logging.info(f"Student {self.student_id} added successfully!")
           
-     def remove_stu (self):
-          pass
-     def edit_stu ():
-          pass
-     def search_stu ():
-          pass
+     def remove_stu (self, student_id):
+         query = "DELETE FROM students WHERE student_id = %s"
+         self.db.execute_query(query, (student_id,))
+         print(f"Student {student_id} removed successfully.")
+         
+     def edit_stu (self, student_id, field, value):
+          """ Updates a specific field of the student record """
+          
+          if field not in ["name", "grade", "email", "age", "class_id", "course_id"]:
+               raise ValueError(f"Invalid field '{field}' provided for update.")
+          
+          query = f"UPDATE students SET {field} = %s WHERE student_id = %s"
+          data = (value, student_id)
+          self.db.execute_query(query, data)
+          
+     def search_stu (self , student_id):
+          query = "SELECT * FROM students WHERE student_id = %s"
+          return self.db.execute_query(query, (student_id,), fetch=True)
 ######................>>>>  teacher         
 class Teacher (person):
      teacherID_list = {}
