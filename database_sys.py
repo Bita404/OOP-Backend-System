@@ -109,6 +109,7 @@ class Student(person):
      def search_stu (self , student_id):
           query = "SELECT * FROM students WHERE student_id = %s"
           return self.db.execute_query(query, (student_id,), fetch=True)
+     
 ######................>>>>  teacher         
 class Teacher (person):
      teacherID_list = {}
@@ -127,14 +128,34 @@ class Teacher (person):
         cls.Last_teacherID += 1 
         return teacher_id
           
-     def add_t ():
-          pass
-     def remove_t ():
-          pass
-     def edit_t ():
-          pass
-     def search_t ():
-          pass
+     def add_t(self):
+          query = """
+            INSERT INTO teachers (teacher_id, name, email, age, class_id, course_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
+          """
+          data = (self.teacher_id, self.name, self.email, self.age, self.class_id, self.course_id)
+          self.db.execute_query(query, data)
+          
+     def remove_t(self, teacher_id):
+          query = "DELETE FROM teachers WHERE teacher_id = %s"
+          self.db.execute_query(query, (teacher_id,))
+          print(f"Teacher {teacher_id} removed successfully.")
+          
+     def edit_t(self,teacher_id , field , value):
+          """Updates a specific field of the teacher record"""
+          valid_fields = ["name", "email", "age", "course_id", "class_id"]
+        
+          if field not in valid_fields:
+               raise ValueError(f"Invalid field '{field}' provided for update.")
+        
+          query = f"UPDATE teachers SET {field} = %s WHERE teacher_id = %s"
+          data = (value, teacher_id)
+          self.db.execute_query(query, data)
+          
+     def search_t(self, teacher_id):
+          query = "SELECT * FROM teachers WHERE teacher_id = %s"
+          data = (teacher_id,)
+          return self.db.execute_query(query, data, fetch=True)
  ######................>>>>  course    
 class Course():
      course_list = {}
@@ -149,15 +170,22 @@ class Course():
           else :
                raise ValueError("ID Error !!! This course ID might already exist OR Invalid teacher ID! ! ! ")
             
+     def add_course(self):
+          query = """
+            INSERT INTO courses (course_id, course_name, total_hours, teacher_id)
+            VALUES (%s, %s, %s, %s)
+          """
+          data = (self.course_id, self.course_name, self.total_hours, self.teacher_id)
+          self.db.execute_query(query, data)
           
-       
-     def add_course ():
+     def remove_course(self, course_id):
+          query = "DELETE FROM courses WHERE course_id = %s"
+          data = (course_id,)
+          self.db.execute_query(query, data)
+          
+     def edit_course (self, course_id, field, value):
           pass
-     def remove_course():
-          pass
-     def edit_course ():
-          pass
-     def search_course ():
+     def search_course (self, course_id):
           pass
      
 ######................>>>>  Class     
