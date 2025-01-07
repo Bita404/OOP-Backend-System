@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import logging
 from datetime import datetime
 
+#############>>>>>>> database connection  <<<<<<<<<<#########
 class DB_connection :
      def __init__(self, user, password, host, database):
         self.user = user 
@@ -39,24 +40,35 @@ class DB_connection :
             if self.connect.is_connected():
                 mycursor.close()
                 self.connect.close()  
-                 
+                
+########>>>>>>>>>>>>>>> base class for any person in the system               
 class person :
-     def __init__(self , name, email ):
+     def __init__(self , name, email , age):
           self.name = name
-          self.email = email 
+          self.email = email
+          self.age = age  
           
      def __str__(self):
-          return f"person name:{self.name} with email: {self.email}"  
-                       
+          return f"person name:{self.name}, {self.age} years old, with email: {self.email}"  
+     
+ #.................................................................................................                      
+ ######................>>>> Student                      
 class Student(person):
-     def __init__(self ,db, student_id ,name , grade ,  email , class_id):
-          super().__init__(name , email)
+     Last_stuID = 1404000
+     def __init__(self ,db, name , grade , email ,age ):
+          super().__init__(name , email , age)
           self.db = db
-          self.student_id = student_id
-          self.class_id = class_id
+          self.student_id = Student.StuID_gen()
           self.grade = grade
+          self.class_id = None
+          self.course_id = None
 
-          
+     @classmethod
+     def StuID_gen(cls):
+        Student_id = "S" + str(cls.Last_stuID)
+        cls.Last_stuID += 1 
+        return Student_id
+        
      def add_stu (self):
           pass
      def remove_stu (self):
@@ -65,13 +77,22 @@ class Student(person):
           pass
      def search_stu ():
           pass
-          
+######................>>>>  teacher         
 class Teacher (person):
-     def __init__(self ,db, teacher_id ,name , email ):
-          super().__init__(name , email)
+     Last_teacherID = 1000
+     def __init__(self ,db ,name , email ,age ):
+          super().__init__(name , email, age)
           self.db = db
-          self.teacher_id = teacher_id
-     
+          self.teacher_id = Teacher.TID_gen()
+          self.course_id = None
+          self.class_id = None
+          
+     @classmethod     
+     def TID_gen(cls):
+        teacher_id = "T" + str(cls.Last_teacherID)
+        cls.Last_teacherID += 1 
+        return teacher_id
+          
      def add_t ():
           pass
      def remove_t ():
@@ -80,10 +101,10 @@ class Teacher (person):
           pass
      def search_t ():
           pass
-    
-class Course : 
-     def __init__(self ,course_id , name , teacher_id , unit ):
-         pass
+ ######................>>>>  course    
+class Course():
+     def __init__(self, db , ):   
+         
      def add_course ():
           pass
      def remove_course():
@@ -92,6 +113,8 @@ class Course :
           pass
      def search_course ():
           pass
+     
+######................>>>>  Class     
 class Class :
      def __init__(self , class_id , class_number ):
           pass
@@ -103,8 +126,8 @@ class Class :
           pass
      def search_class ():
           pass
-     
-class logger:
+#........................................................................     
+####################>>>>>>> LOG INFO FILE     
+class log:
      def __init__(self):
           pass     
-                  
