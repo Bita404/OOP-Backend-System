@@ -1,6 +1,7 @@
 import mysql.connector
 import  pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 from datetime import datetime
 #################################
 # user input oder : 
@@ -266,94 +267,148 @@ class Course(Class):
 #........................................................................     
 #####>>>>>>>>>>>>>>>>>>>> Visualization and Reports 
 class Reporting:
-    def __init__(self, db, logger):
+    def __init__(self, db):
         self.db = db
-        self.logger = logger
 
-    def display_enrollment_trends(self):
-        """Analyze course enrollment"""
+    def execute_query(self, query, params=None):
+        """Helper method to execute database queries."""
+        try:
+            return self.db.execute_query(query, params, fetch=True)
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return []
+
+    # -------------------- CSV Reports --------------------
+    def class_summary_report(self, filename="class_summary.csv"):
         query = """
-            SELECT courses.course_name, COUNT(students.student_id) AS enrollment_count, classes.class_name
-            FROM students
-            INNER JOIN classes ON students.class_id = classes.class_id
-            INNER JOIN courses ON classes.class_id = courses.class_id
-            GROUP BY courses.course_name, classes.class_name
+            SELECT class_id, class_name, class_capacity 
+            FROM classes
         """
-        data = self.db.execute_query(query, fetch=True)
-        if not data:
-            print("No enrollment data found!")
-            return
+        data = self.execute_query(query)
+        if data:
+            df = pd.DataFrame(data, columns=["Class ID", "Class Name", "Class Capacity"])
+            df.to_csv(filename, index=False)
+            print(f"Class summary report saved to {filename}.")
+        else:
+            print("No data found for class summary report.")
 
-        df = pd.DataFrame(data, columns=["Course Name", "Enrollment Count", "Class Name"])
-
-        plt.figure(figsize=(10, 6))
-        for course in df["Course Name"].unique():
-            course_data = df[df["Course Name"] == course]
-            plt.plot(course_data["Class Name"], course_data["Enrollment Count"], marker='o', label=course)
-
-        plt.title("Enrollment Trends Over Time")
-        plt.xlabel("Class Name")
-        plt.ylabel("Enrollment Count")
-        plt.legend()
-        plt.grid()
-        plt.show()
-
-        self.logger.write_log("display_enrollment_trends", "Visualization generated successfully.")
-        
-   #>>>>>>>>>>>>>>>>>>> Teacher Report
-    def analyze_teacher_workload(self):
-        """Calculate and visualize teacher workload."""
+    def teacher_workload_report(self, filename="teacher_workload.csv"):
         query = """
-            SELECT teachers.name AS teacher_name, COUNT(courses.course_id) AS course_count, 
-                   SUM((SELECT COUNT(student_id) FROM students WHERE students.class_id = courses.class_id)) AS total_students
+            SELECT teachers.teacher_id, teachers.name, COUNT(DISTINCT courses.course_id) AS total_courses, 
+                   COUNT(DISTINCT students.student_id) AS total_students
             FROM teachers
             LEFT JOIN courses ON teachers.teacher_id = courses.teacher_id
+            LEFT JOIN students ON courses.class_id = students.class_id
+            GROUP BY teachers.teacher_id, teachers.name
+        """
+        data = self.execute_query(query)
+        if data:
+            df = pd.DataFrame(data, columns=["Teacher ID", "Teacher Name", "Total Courses", "Total Students"])
+            df.to_csv(filename, index=False)
+            print(f"Teacher workload report saved to {filename}.")
+        else:
+            print("No data found for teacher workload report.")
+
+    def student_performance_report(self, filename="student_performance.csv"):
+        query = """
+            SELECT students.student_id, students.name, courses.course_name, students.grade
+            FROM students
+            LEFT JOIN courses ON students.class_id = courses.class_id
+        """
+        data = self.execute_query(query)
+        if data:
+            df = pd.DataFrame(data, columns=["Student ID", "Student Name", "Course Name", "Grade"])
+            df.to_csv(filename, index=False)
+            print(f"Student performance report saved to {filename}.")
+        else:
+            print("No data found for student performance report.")
+
+    def enrollment_trends_report(self, filename="enrollment_trends.csv"):
+        query = """
+            SELECT class_id, COUNT(student_id) AS total_students, YEAR(created_at) AS year
+            FROM students
+            GROUP BY class_id, YEAR(created_at)
+            ORDER BY year
+        """
+        data = self.execute_query(query)
+        if data:
+            df = pd.DataFrame(data, columns=["Class ID", "Total Students", "Year"])
+            df.to_csv(filename, index=False)
+            print(f"Enrollment trends report saved to {filename}.")
+        else:
+            print("No data found for enrollment trends report.")
+
+    # ----------------- Data Visualization -----------------
+    def display_enrollment_trends(self):
+        query = """
+            SELECT YEAR(created_at) AS year, COUNT(student_id) AS total_students
+            FROM students
+            GROUP BY year
+            ORDER BY year
+        """
+        data = self.execute_query(query)
+        if data:
+            df = pd.DataFrame(data, columns=["Year", "Total Students"])
+            plt.figure(figsize=(10, 6))
+            plt.plot(df["Year"], df["Total Students"], marker="o", linestyle="-", color="b")
+            plt.title("Enrollment Trends Over Time")
+            plt.xlabel("Year")
+            plt.ylabel("Total Students")
+            plt.grid(True)
+            plt.show()
+        else:
+            print("No data available to display enrollment trends.")
+
+    def analyze_teacher_workload(self):
+        query = """
+            SELECT teachers.name, COUNT(DISTINCT courses.course_id) AS total_courses, 
+                   COUNT(DISTINCT students.student_id) AS total_students
+            FROM teachers
+            LEFT JOIN courses ON teachers.teacher_id = courses.teacher_id
+            LEFT JOIN students ON courses.class_id = students.class_id
             GROUP BY teachers.name
         """
-        data = self.db.execute_query(query, fetch=True)
-        if not data:
-            print("No teacher workload data found!")
-            return
+        data = self.execute_query(query)
+        if data:
+            df = pd.DataFrame(data, columns=["Teacher Name", "Total Courses", "Total Students"])
 
-        df = pd.DataFrame(data, columns=["Teacher Name", "Course Count", "Total Students"])
+            x = np.arange(len(df["Teacher Name"]))
+            width = 0.35
 
-        df.plot(x="Teacher Name", y=["Course Count", "Total Students"], kind="bar", figsize=(10, 6))
-        plt.title("Teacher Workload Analysis")
-        plt.xlabel("Teacher Name")
-        plt.ylabel("Count")
-        plt.xticks(rotation=45)
-        plt.legend(["Courses", "Students"])
-        plt.grid(axis="y")
-        plt.show()
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.bar(x - width / 2, df["Total Courses"], width, label="Courses")
+            ax.bar(x + width / 2, df["Total Students"], width, label="Students")
 
-        self.logger.write_log("analyze_teacher_workload", "Visualization generated successfully.")
-        
-  #>>>>>>>>>>>>>>>>>>>>>>>> student report
+            ax.set_xlabel("Teachers")
+            ax.set_ylabel("Count")
+            ax.set_title("Teacher Workload Analysis")
+            ax.set_xticks(x)
+            ax.set_xticklabels(df["Teacher Name"], rotation=45, ha="right")
+            ax.legend()
+
+            plt.tight_layout()
+            plt.show()
+        else:
+            print("No data available to analyze teacher workload.")
+
     def summarize_student_performance(self, student_id):
-        """Visualize a student's performance across courses."""
         query = """
             SELECT courses.course_name, students.grade
             FROM students
             INNER JOIN courses ON students.class_id = courses.class_id
             WHERE students.student_id = %s
         """
-        data = self.db.execute_query(query, (student_id,), fetch=True)
-        if not data:
-            print(f"No performance data found for Student ID: {student_id}")
-            return
+        data = self.execute_query(query, (student_id,))
+        if data:
+            df = pd.DataFrame(data, columns=["Course Name", "Grade"])
 
-        df = pd.DataFrame(data, columns=["Course Name", "Grade"])
-
-        plt.figure(figsize=(10, 6))
-        plt.plot(df["Course Name"], df["Grade"], marker='o', linestyle='-', color='b', label="Grade")
-        plt.title(f"Student Performance Overview (Student ID: {student_id})")
-        plt.xlabel("Course Name")
-        plt.ylabel("Grade")
-        plt.ylim(0, 100)
-        plt.grid()
-        plt.legend()
-        plt.show()
-
-        self.logger.write_log("summarize_student_performance", f"Performance visualization generated for Student ID: {student_id}.")
-    
- 
+            plt.figure(figsize=(10, 6))
+            plt.plot(df["Course Name"], df["Grade"], marker="o", linestyle="-", color="g")
+            plt.title(f"Performance Overview for Student {student_id}")
+            plt.xlabel("Course")
+            plt.ylabel("Grade")
+            plt.xticks(rotation=45)
+            plt.grid(True)
+            plt.show()
+        else:
+            print(f"No performance data available for student ID {student_id}.")
