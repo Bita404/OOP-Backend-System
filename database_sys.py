@@ -1,9 +1,20 @@
 import mysql.connector
 import  pandas as pd
 import matplotlib.pyplot as plt
-import logging
 from datetime import datetime
 
+####################>>>>>>> LOG INFO FILE
+class Logger:
+    def __init__(self, log_file="commands.log"):
+        """ System Log maker """
+        self.log_file = log_file
+
+    def write_log(self, cmd, outcome):
+        with open(self.log_file, "a") as file:
+            time_now = datetime.now().strftime("%d/%m/%Y--%I:%M-%p")
+            text = f"{cmd}: {time_now} | Outcome: {outcome}\n"
+            file.write(text)
+            
 #############>>>>>>> database connection  <<<<<<<<<<#########
 class DB_connection :
      def __init__(self, user, password, host, database):
@@ -40,7 +51,7 @@ class DB_connection :
             if self.connect.is_connected():
                 mycursor.close()
                 self.connect.close()  
-                
+#.........................................................................................................               
 ########>>>>>>>>>>>>>>> base class for any person in the system               
 class person :
      def __init__(self , name, email , age):
@@ -70,7 +81,14 @@ class Student(person):
         return Student_id
         
      def add_stu (self):
-          pass
+          query = """
+            INSERT INTO students (student_id, name, grade, email, age, class_id, course_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+          """
+          data = (self.student_id, self.name, self.grade, self.email, self.age, self.class_id, self.course_id)
+          self.db.execute_query(query, data)
+          logging.info(f"Student {self.student_id} added successfully!")
+          
      def remove_stu (self):
           pass
      def edit_stu ():
@@ -130,7 +148,7 @@ class Course():
      
 ######................>>>>  Class     
 class Class :
-     def __init__(self , class_id , class_number ):
+     def __init__(self , class_id , class_name , student_id , teaacher_id ):
           pass
      def add_class ():
           pass
@@ -141,7 +159,5 @@ class Class :
      def search_class ():
           pass
 #........................................................................     
-####################>>>>>>> LOG INFO FILE     
-class log:
-     def __init__(self):
-          pass     
+     
+ 
