@@ -21,7 +21,7 @@ class Logger:
             
 #############>>>>>>> database connection  <<<<<<<<<<#########
 class DB_connection :
-     def __init__(self, user, password, host, database , logger):
+     def __init__(self, user, password, host, database , logger):                                                                                              
         self.user = user 
         self.password = password 
         self.host = host 
@@ -271,7 +271,7 @@ class Reporting:
         self.db = db
 
     def execute_query(self, query, params=None):
-        """Helper method to execute database queries."""
+        """ to execute database queries """
         try:
             return self.db.execute_query(query, params, fetch=True)
         except Exception as e:
