@@ -84,7 +84,7 @@ class Class :
      classID_list = {}
      def __init__(self ,db , class_id , class_name , class_capacity ):
           if class_id not in Class.classID_list : 
-              if not isinstance(class_capacity, int) or class_capacity <= 0:
+              if not isinstance(class_capacity, int) or class_capacity < 0:
                  raise ValueError("Invalid class capacity! Must be a positive Number ! !")
               self.db = db 
               self.class_name = class_name 
@@ -106,7 +106,7 @@ class Class :
           query = "DELETE FROM classes WHERE class_id = %s"
           data = (class_id,)
           self.db.execute_query(query, data)
-
+          
      def edit_class(self, class_id, field, value):
           if field not in ["class_name", "class_capacity"]:
             raise ValueError(f"Invalid field '{field}' provided for update.")

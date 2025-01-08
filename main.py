@@ -45,14 +45,19 @@ def class_menu():
 
         choice = input("Enter your choice: ")
         if choice == "1":
-            class_id = input("Enter Class ID: ")
+            class_id = input("Enter an ID for the Class: ")
             class_name = input("Enter Class Name: ")
             class_capacity = int(input("Enter Class Capacity: "))
             C = Class(dbb ,class_id, class_name, class_capacity)
             C.add_class()
             
         elif choice == "2":
-            pass
+            class_id =input("Enter The class ID that you want to Update:")
+            field = input("Enter The field To Update:")
+            value =input("Enter The new Value :")
+            C = Class(dbb , class_id, "" , 0 )
+            C.edit_class(class_id , field, value)
+            
         elif choice == "3":
             pass
         elif choice == "4":
