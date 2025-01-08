@@ -1,8 +1,6 @@
 from database_sys import *
 
 ##>>>>>>>>>>>>>>  main menu provide 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-logger = Logger()
-dbb = DB_connection("root" , "Bita1380" , "localhost" , "school_sys", logger)
 
 def main_menu():
     while True:
@@ -76,7 +74,7 @@ def class_menu():
                 ####>>>>> If the ID is invalid it goes back to class menu  <<
                 class_menu()   
            #>........................................DISPLAY CLASSES TABLE
-        elif choice == "4":
+        elif choice == "4":           
             query = "SELECT * FROM classes"
             result = dbb.execute_query(query, fetch=True)
             if result:
@@ -195,8 +193,17 @@ def report_menu():
             break
         else:
             print("Invalid choice! choose Valid Options !!!")
-
+            
+#############################################################################################
 if __name__ == "__main__":
-    main_menu()            
+    logger = Logger()
+    dbb = DB_connection("root" , "Bita1380" , "localhost" , "school_sys", logger)
+    try:
+        main_menu()  
+        
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        dbb.close_connection()              
             
 

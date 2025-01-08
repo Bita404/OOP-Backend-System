@@ -46,7 +46,7 @@ class DB_connection:
     def execute_query(self, query, data=None, fetch=False):
         try:
             if self.connect is None:
-                self.connection()  # Attempt to connect if not already connected
+                self.connection()  
 
             if self.connect is not None:
                 mycursor = self.connect.cursor()
