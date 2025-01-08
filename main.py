@@ -59,7 +59,10 @@ def class_menu():
             C.edit_class(class_id , field, value)
             
         elif choice == "3":
-            pass
+            class_id = input("Enter The class ID to delete:")
+            C = Class(dbb , class_id, "" , 0 )
+            C.remove_class(class_id)
+            
         elif choice == "4":
             pass
         elif choice == "5":
