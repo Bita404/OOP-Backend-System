@@ -20,44 +20,53 @@ class Logger:
             file.write(text)
             
 #############>>>>>>> database connection  <<<<<<<<<<#########
-class DB_connection :
-     def __init__(self, user, password, host, database , logger):                                                                                              
+class DB_connection:
+    def __init__(self, user, password, host, database, logger):
         self.user = user 
         self.password = password 
         self.host = host 
-        self.databse = database
+        self.database = database
         self.connect = None
         self.logger = logger
         
-     def connnection(self):
-        self.connect = mysql.connector.connect(
-          user = self.user,
-          password = self.password,
-          host = self.host,
-          database = self.databse
-        )   
-        
-     def execute_query(self, query, data=None, fetch=False):
+    def connection(self):
         try:
-            self.connnection() 
-            mycursor = self.connect.cursor() 
-            mycursor.execute(query, data)
+            self.connect = mysql.connector.connect(
+                user=self.user,
+                password=self.password,
+                host=self.host,
+                database=self.database
+            )
+            self.logger.write_log("connection", "Connection successful")
+        except mysql.connector.Error as err:
+            self.logger.write_log("connection", f"Error: {err}")
+            print(f"Error: {err}")
+            self.connect = None
+        
+    def execute_query(self, query, data=None, fetch=False):
+        try:
+            if self.connect is None:
+                self.connection()  # Attempt to connect if not already connected
+
+            if self.connect is not None:
+                mycursor = self.connect.cursor()
+                mycursor.execute(query, data)
+                if fetch:
+                    data = mycursor.fetchall()
+                    self.logger.write_log("execute_query", "Query executed successfully with fetch")
+                    return data
+                affected_rows = mycursor.rowcount
+                self.connect.commit()
+                self.logger.write_log("execute_query", f"Query executed successfully, {affected_rows} rows affected")
+                return affected_rows
         except Exception as e:
-            print(e)
             self.logger.write_log("execute_query", f"Error: {e}")
-        else:
-            if fetch:
-                data = mycursor.fetchall()
-                self.logger.write_log("execute_query", "Query executed successfully with fetch")
-                return data
-            affected_rows = mycursor.rowcount
-            self.connect.commit()
-            self.logger.write_log("execute_query", f"Query executed successfully, {affected_rows} rows affected")
-            return affected_rows
+            print(f"Error executing query: {e}")
         finally:
-            if self.connect.is_connected():
+            if self.connect and self.connect.is_connected():
                 mycursor.close()
-                self.connect.close()  
+                self.connect.close()
+                self.logger.write_log("execute_query", "Connection closed after query execution")
 #.........................................................................................................               
 ########>>>>>>>>>>>>>>> base class for any person in the system               
 class person :
@@ -412,3 +421,14 @@ class Reporting:
             plt.show()
         else:
             print(f"No performance data available for student ID {student_id}.")
+            
+            
+logger = Logger()
+
+dbb = DB_connection("root", "Bita1380", "localhost", "school_sys", logger)
+
+query = "SELECT * FROM classes"
+result = dbb.execute_query(query, fetch=True)
+if result:
+    for row in result:
+        print(row)
