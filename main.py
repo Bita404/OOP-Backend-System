@@ -32,7 +32,7 @@ def main_menu():
         else:
             print("womp womp ! Invalid choice! try valid options ! ! ")
 
-#>>>>>>>>>>>>>>>>......CLASS MENU            
+#>>>>>>>>>>>>>>>>..........................................CLASS MENU.....................            
 def class_menu():
     while True:
         print("\n=====> Class Management <=====")
@@ -42,33 +42,52 @@ def class_menu():
         print("4. Show All Classes")
         print("5. Search for a Class")
         print("6. Back to Main Menu")
-
+        #>......................................ADD CLASS
         choice = input("Enter your choice: ")
         if choice == "1":
             class_id = input("Enter an ID for the Class: ")
             class_name = input("Enter Class Name: ")
             class_capacity = int(input("Enter Class Capacity: "))
-            C = Class(dbb ,class_id, class_name, class_capacity)
-            C.add_class()
-            
+            try:
+               C = Class(dbb ,class_id, class_name, class_capacity)
+               C.add_class()
+            except ValueError as e:
+                print(e)
+         #>......................................EDIT CLASS       
         elif choice == "2":
             class_id =input("Enter The class ID that you want to Update:")
             field = input("Enter The field To Update:")
             value =input("Enter The new Value :")
-            C = Class(dbb , class_id, "" , 0 )
-            C.edit_class(class_id , field, value)
-            
+            if class_id in Class.classID_list:   
+                 C = Class(dbb , class_id, "" , 0 )
+                 C.edit_class(class_id , field, value)
+            else:
+                print("\n>>>> Invalid ID ! try again !<<<<<") 
+                ####>>>>> If the ID is invalid it goes back to class menu  <<
+                class_menu()  
+          #>........................................REMOVE CLASS        
         elif choice == "3":
             class_id = input("Enter The class ID to delete:")
-            C = Class(dbb , class_id, "" , 0 )
-            C.remove_class(class_id)
-            
+            if class_id in Class.classID_list:
+               C = Class(dbb , class_id, "" , 0 )
+               C.remove_class(class_id)
+            else :
+                print("Invalid ID! try again !" )
+                ####>>>>> If the ID is invalid it goes back to class menu  <<
+                class_menu()   
+           #>........................................DISPLAY CLASSES TABLE
         elif choice == "4":
-            pass
+            query = "SELECT * FROM classes"
+            result = dbb.execute_query(query, fetch=True)
+            if result:
+                for row in result:
+                  print(row)
+         #>..........................................SEARCH 
         elif choice == "5":
             pass
+         #>.........................................BACK TO MAIN MENU 
         elif choice == "6":
-            break
+            main_menu()
         else:
             print("womp womp ! Invalid choice!")
           
