@@ -1,0 +1,10 @@
+mysql> show tables;
++----------------------+
+| Tables_in_school_sys |
++----------------------+
+| classes              |
+| courses              |
+| students             |
+| teachers             |
++----------------------+
+4 rows in set (0.00 sec)
