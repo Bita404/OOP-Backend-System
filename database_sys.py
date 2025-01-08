@@ -84,18 +84,15 @@ class person :
  #.................................................................................................                      
  ######................>>>>  CLASS (base class for teacher and student)    
 class Class :
-     classID_list = {}
+     #classID_list = {} its already in the database 
      def __init__(self ,db , class_id , class_name , class_capacity ):
-          if class_id not in Class.classID_list : 
+          
               if not isinstance(class_capacity, int) or class_capacity < 0:
                  raise ValueError("Invalid class capacity! Must be a positive Number ! !")
               self.db = db 
               self.class_name = class_name 
               self.class_id = class_id
               self.class_capacity = class_capacity
-              Class.classID_list[class_id] = self
-          else :
-               raise ValueError("ID Error !!! This class ID already exists ! ! ! ")
      
      def add_class (self):
           query = """
@@ -104,6 +101,7 @@ class Class :
           """
           data = (self.class_id, self.class_name, self.class_capacity)
           self.db.execute_query(query, data)
+          #Class.classID_list[self.class_id] = self
           
      def remove_class(self , class_id):
           query = "DELETE FROM classes WHERE class_id = %s"
@@ -122,7 +120,13 @@ class Class :
           query = "SELECT * FROM classes WHERE class_id = %s"
           data = (class_id,)
           result = self.db.execute_query(query, data, fetch=True)
-          return result
+          if result:
+               for row in result:
+                   print(f"\n Class ID: {row[0]}, Name: {row[1]}, Capacity: {row[2]}")
+                   return result
+          else:
+                print(f"\n No class found with ID: {self.class_id}")
+                return None
  ######................>>>> Student                      
 class Student(person , Class):
      stu_list ={}

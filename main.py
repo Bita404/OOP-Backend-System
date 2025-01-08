@@ -56,21 +56,21 @@ def class_menu():
             class_id =input("Enter The class ID that you want to Update:")
             field = input("Enter The field To Update:")
             value =input("Enter The new Value :")
-            if class_id in Class.classID_list:   
+            try:   
                  C = Class(dbb , class_id, "" , 0 )
                  C.edit_class(class_id , field, value)
-            else:
-                print("\n>>>> Invalid ID ! try again !<<<<<") 
+            except ValueError as e: 
+                print(e) 
                 ####>>>>> If the ID is invalid it goes back to class menu  <<
                 class_menu()  
           #>........................................REMOVE CLASS        
         elif choice == "3":
             class_id = input("Enter The class ID to delete:")
-            if class_id in Class.classID_list:
+            try:
                C = Class(dbb , class_id, "" , 0 )
                C.remove_class(class_id)
-            else :
-                print("Invalid ID! try again !" )
+            except ValueError as e :
+                print(e)
                 ####>>>>> If the ID is invalid it goes back to class menu  <<
                 class_menu()   
            #>........................................DISPLAY CLASSES TABLE
@@ -82,7 +82,10 @@ def class_menu():
                   print(row)
          #>..........................................SEARCH 
         elif choice == "5":
-            pass
+            class_id=input("Enter the class ID to search:")
+            C= Class(dbb , class_id , "" , 0)
+            C.search_class(class_id)
+
          #>.........................................BACK TO MAIN MENU 
         elif choice == "6":
             break
