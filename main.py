@@ -1,14 +1,18 @@
 from database_sys import *
 
 ##>>>>>>>>>>>>>>  main menu provide 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+logger = Logger()
+dbb = DB_connection("root" , "localhost" , "Bita1380" , "school_sys", logger)
+
 def main_menu():
     while True:
-        print("\n===== Main Menu =====")
-        print("1. Manage Classes")
+        print("\n<<<<<  WELCOME TO THE SCHOOL SYSTEM  >>>>>")
+        print("xX=========== Main Menu ===========Xx")
+        print("\n1. Manage Classes")
         print("2. Manage Students")
         print("3. Manage Teachers")
         print("4. Manage Courses")
-        print("5. Generate Reports")
+        print("5. Generate Reports and Visualization")
         print("6. Exit")
 
         choice = input("Enter your choice: ")
@@ -23,7 +27,7 @@ def main_menu():
         elif choice == "5":
             report_menu()
         elif choice == "6":
-            print("Exiting the program.... bye bye (ó﹏ò｡)!")
+            print("ok...Exiting the program.... bye bye o(╥﹏╥) !")
             break
         else:
             print("womp womp ! Invalid choice! try valid options ! ! ")
@@ -31,8 +35,8 @@ def main_menu():
 #>>>>>>>>>>>>>>>>......CLASS MENU            
 def class_menu():
     while True:
-        print("\n===== Class Management =====")
-        print("1. Add a New Class")
+        print("\n=====> Class Management <=====")
+        print("\n1. Add a New Class")
         print("2. Update Class Details")
         print("3. Delete a Class")
         print("4. Show All Classes")
@@ -41,7 +45,12 @@ def class_menu():
 
         choice = input("Enter your choice: ")
         if choice == "1":
-            pass
+            class_id = input("Enter Class ID: ")
+            class_name = input("Enter Class Name: ")
+            class_capacity = int(input("Enter Class Capacity: "))
+            C = Class(dbb ,class_id, class_name, class_capacity)
+            C.add_class()
+            
         elif choice == "2":
             pass
         elif choice == "3":
@@ -58,8 +67,8 @@ def class_menu():
   #>>>>>>>>>>>..............STUDENT MENU          
 def student_menu():
     while True:
-        print("\n===== Student Management =====")
-        print("1. Add a New Student")
+        print("\n=====> Student Management <=====")
+        print("\n1. Add a New Student")
         print("2. Update Student Details")
         print("3. Delete a Student")
         print("4. Show All Students")
@@ -85,8 +94,8 @@ def student_menu():
   #>>>>>>>>>>>>>>.............TEACHER MENU          
 def teacher_menu():
     while True:
-        print("\n===== Teacher Management =====")
-        print("1. Add a New Teacher")
+        print("\n=====> Teacher Management <=====")
+        print("\n1. Add a New Teacher")
         print("2. Update Teacher Details")
         print("3. Delete a Teacher")
         print("4. Show All Teachers")
@@ -112,8 +121,8 @@ def teacher_menu():
    #>>>>>>>>>........COURSE MENU         
 def course_menu():
     while True:
-        print("\n===== Course Management =====")
-        print("1. Add a New Course")
+        print("\n=====> Course Management <=====")
+        print("\n1. Add a New Course")
         print("2. Update Course Details")
         print("3. Delete a Course")
         print("4. Show All Courses")
@@ -139,8 +148,8 @@ def course_menu():
    #>>>>>>>>>>>>>>>>>.......... REPORT MENU         
 def report_menu():
     while True:
-        print("\n===== Reports =====")
-        print("1. View Class-wise Student List")
+        print("\n=====> Reports and Visualization <=====")
+        print("\n1. View Class-wise Student List")
         print("2. View Teacher Assignments")
         print("3. View Course Enrollments")
         print("4. Generate Summary Report")
@@ -160,6 +169,7 @@ def report_menu():
         else:
             print("Invalid choice! choose Valid Options !!!")
 
-            
+if __name__ == "__main__":
+    main_menu()            
             
 
