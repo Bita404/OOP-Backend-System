@@ -85,7 +85,7 @@ def class_menu():
             pass
          #>.........................................BACK TO MAIN MENU 
         elif choice == "6":
-            main_menu()
+            break
         else:
             print("womp womp ! Invalid choice!")
           
@@ -204,6 +204,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Unexpected error: {e}")
     finally:
-        dbb.close_connection()              
+        dbb.close()              
             
 

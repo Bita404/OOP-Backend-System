@@ -20,53 +20,56 @@ class Logger:
             file.write(text)
             
 #############>>>>>>> database connection  <<<<<<<<<<#########
+import mysql.connector
+
 class DB_connection:
     def __init__(self, user, password, host, database, logger):
-        self.user = user 
-        self.password = password 
-        self.host = host 
+        self.user = user
+        self.password = password
+        self.host = host
         self.database = database
-        self.connect = None
+        self.connection = None
         self.logger = logger
-        
-    def connection(self):
-        try:
-            self.connect = mysql.connector.connect(
-                user=self.user,
-                password=self.password,
-                host=self.host,
-                database=self.database
-            )
-            self.logger.write_log("connection", "Connection successful")
-        except mysql.connector.Error as err:
-            self.logger.write_log("connection", f"Error: {err}")
-            print(f"Error: {err}")
-            self.connect = None
-        
-    def execute_query(self, query, data=None, fetch=False):
-        try:
-            if self.connect is None:
-                self.connection()  
 
-            if self.connect is not None:
-                mycursor = self.connect.cursor()
-                mycursor.execute(query, data)
-                if fetch:
-                    data = mycursor.fetchall()
-                    self.logger.write_log("execute_query", "Query executed successfully with fetch")
-                    return data
-                affected_rows = mycursor.rowcount
-                self.connect.commit()
-                self.logger.write_log("execute_query", f"Query executed successfully, {affected_rows} rows affected")
-                return affected_rows
-        except Exception as e:
-            self.logger.write_log("execute_query", f"Error: {e}")
+    def connect(self):
+        """connect to the database"""
+        try:
+            if self.connection is None or not self.connection.is_connected():
+                self.connection = mysql.connector.connect(
+                    user=self.user,
+                    password=self.password,
+                    host=self.host,
+                    database=self.database
+                )
+                self.logger.write_log("connect", "Database connection established")
+        except mysql.connector.Error as e:
+            self.logger.write_log("connect", f"Connection error: {e}")
+            print(f"Connection error: {e}")
+            self.connection = None
+    #>...........execute QUERY and FETCH RESULT
+    def execute_query(self, query, data=None, fetch=False):
+        """ Execute query """
+        try:
+            self.connect()  
+            cursor = self.connection.cursor()
+            cursor.execute(query, data)
+            if fetch:
+                result = cursor.fetchall()
+                self.logger.write_log("execute_query", "Query executed with fetch")
+                return result
+            self.connection.commit()
+            self.logger.write_log("execute_query", "Query executed successfully")
+        except mysql.connector.Error as e:
+            self.logger.write_log("execute_query", f"Error executing query: {e}")
             print(f"Error executing query: {e}")
         finally:
-            if self.connect and self.connect.is_connected():
-                mycursor.close()
-                self.connect.close()
-                self.logger.write_log("execute_query", "Connection closed after query execution")
+            if 'cursor' in locals() and cursor:
+                cursor.close()  
+
+    def close(self):
+        if self.connection and self.connection.is_connected():
+            self.connection.close()
+            self.logger.write_log("close", "Database connection closed")
 #.........................................................................................................               
 ########>>>>>>>>>>>>>>> base class for any person in the system               
 class person :
