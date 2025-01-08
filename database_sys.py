@@ -96,7 +96,7 @@ class Class :
      
      def add_class (self):
           query = """
-            INSERT INTO class (class_id, class_name , class_capacity)
+            INSERT INTO classes (class_id, class_name , class_capacity)
             VALUES (%s, %s, %s)
           """
           data = (self.class_id, self.class_name, self.class_capacity)

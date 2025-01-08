@@ -2,7 +2,7 @@ from database_sys import *
 
 ##>>>>>>>>>>>>>>  main menu provide 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 logger = Logger()
-dbb = DB_connection("root" , "localhost" , "Bita1380" , "school_sys", logger)
+dbb = DB_connection("root" , "Bita1380" , "localhost" , "school_sys", logger)
 
 def main_menu():
     while True:
