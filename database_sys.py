@@ -131,6 +131,7 @@ class Class :
 class Student(person , Class):
      stu_list ={}
      Last_stuID = 1404000
+     
      def __init__(self ,db, name , grade , email ,age, class_id ):
           super().__init__(name , email , age)
           Class.__init__(class_id)

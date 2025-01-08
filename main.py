@@ -30,7 +30,7 @@ def main_menu():
         else:
             print("womp womp ! Invalid choice! try valid options ! ! ")
 
-#>>>>>>>>>>>>>>>>..........................................CLASS MENU.....................            
+#>>>>>>>>>>>>>>>>..........................................CLASS MENU................................            
 def class_menu():
     while True:
         print("\n=====> Class Management <=====")
@@ -61,8 +61,6 @@ def class_menu():
                  C.edit_class(class_id , field, value)
             except ValueError as e: 
                 print(e) 
-                ####>>>>> If the ID is invalid it goes back to class menu  <<
-                class_menu()  
           #>........................................REMOVE CLASS        
         elif choice == "3":
             class_id = input("Enter The class ID to delete:")
@@ -70,9 +68,7 @@ def class_menu():
                C = Class(dbb , class_id, "" , 0 )
                C.remove_class(class_id)
             except ValueError as e :
-                print(e)
-                ####>>>>> If the ID is invalid it goes back to class menu  <<
-                class_menu()   
+                print(e)   
            #>........................................DISPLAY CLASSES TABLE
         elif choice == "4":           
             query = "SELECT * FROM classes"
@@ -92,7 +88,7 @@ def class_menu():
         else:
             print("womp womp ! Invalid choice!")
           
-  #>>>>>>>>>>>..............STUDENT MENU          
+  #>>>>>>>>>>>.........................................STUDENT MENU........................................          
 def student_menu():
     while True:
         print("\n=====> Student Management <=====")
@@ -104,16 +100,28 @@ def student_menu():
         print("6. Back to Main Menu")
 
         choice = input("Enter your choice: ")
+      #>>>>>>...............................ADD STUDENT  
         if choice == "1":
-            pass
+            name =input("Enter Student name:")
+            grade = input("Enter student Grade:")
+            email = input("Enter student Email:")
+            age = input("Enter Student Age :")
+            class_id =input("Enter Student class ID")
+            
+            
+        #>>>>....................................EDIT STUDENT
         elif choice == "2":
             pass
+        #>>>>>......................................REMOVE STUDENT
         elif choice == "3":
             pass
+        #>>>>>>.......................................DISPLAY STUDENTS TABLE
         elif choice == "4":
             pass
+        #>>>>>>..........................................SEARCH
         elif choice == "5":
             pass
+        ####...................BACK
         elif choice == "6":
             break
         else:
