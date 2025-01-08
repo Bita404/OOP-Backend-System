@@ -1,5 +1,6 @@
 from database_sys import *
 
+##>>>>>>>>>>>>>>  main menu provide 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 def main_menu():
     while True:
         print("\n===== Main Menu =====")
@@ -26,7 +27,8 @@ def main_menu():
             break
         else:
             print("womp womp ! Invalid choice! try valid options ! ! ")
-            
+
+#>>>>>>>>>>>>>>>>......CLASS MENU            
 def class_menu():
     while True:
         print("\n===== Class Management =====")
@@ -52,7 +54,8 @@ def class_menu():
             break
         else:
             print("womp womp ! Invalid choice!")
-            
+          
+  #>>>>>>>>>>>..............STUDENT MENU          
 def student_menu():
     while True:
         print("\n===== Student Management =====")
@@ -79,6 +82,7 @@ def student_menu():
         else:
             print("Invalid choice! Womp Womp !!!!!!!!")
             
+  #>>>>>>>>>>>>>>.............TEACHER MENU          
 def teacher_menu():
     while True:
         print("\n===== Teacher Management =====")
@@ -105,6 +109,7 @@ def teacher_menu():
         else:
             print("Invalid choice! Please try agai ! ! womp")
             
+   #>>>>>>>>>........COURSE MENU         
 def course_menu():
     while True:
         print("\n===== Course Management =====")
@@ -131,6 +136,7 @@ def course_menu():
         else:
             print("Invalid choice! use valid choices !!!!!")
             
+   #>>>>>>>>>>>>>>>>>.......... REPORT MENU         
 def report_menu():
     while True:
         print("\n===== Reports =====")
