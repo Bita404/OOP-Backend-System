@@ -135,14 +135,13 @@ class Student(person , Class):
      def __init__(self ,db, name , grade , email ,age, class_id ):
           super().__init__(name , email , age)
           Class.__init__(class_id)
-          if class_id in Class.classID_list:
-             self.db = db
-             self.student_id = Student.StuID_gen()
-             Student.stu_list[self.student_id] = self
-             self.grade = grade
-             self.class_id = class_id
-          else :
-               raise ValueError(f"'{self.class_id}' Invalid Class ID ! ! make the class first !")   
+          if not isinstance(age, int) or not isinstance(grade, int) or grade>100 or grade<0 or age<5 or age>18 :
+                 raise ValueError("Invalid Age or grade Number ! !  ")
+          self.db = db
+          self.student_id = Student.StuID_gen()
+          Student.stu_list[self.student_id] = self
+          self.grade = grade
+          self.class_id = class_id 
 
      @classmethod
      def StuID_gen(cls):
@@ -157,15 +156,22 @@ class Student(person , Class):
           """
           data = (self.student_id, self.name, self.grade, self.email, self.age, self.class_id)
           self.db.execute_query(query, data)
+          print(f"Student added successfully! Assigned Student ID: {self.student_id}")
           
      def remove_stu (self, student_id):
+         if not self.is_student_id_valid(student_id):
+            print(f"Student ID '{student_id}' does not exist.")
+            return
          query = "DELETE FROM students WHERE student_id = %s"
          self.db.execute_query(query, (student_id,))
          print(f"Student {student_id} removed successfully.")
          
      def edit_stu (self, student_id, field, value):
           """ Updates a specific field of the student record """
-          
+          if not self.is_student_id_valid(student_id):
+            print(f"Student ID '{student_id}' does not exist.")
+            return
+        
           if field not in ["name", "grade", "email", "age", "class_id"]:
                raise ValueError(f"Invalid field '{field}' provided for update.")
           
@@ -175,7 +181,20 @@ class Student(person , Class):
           
      def search_stu (self , student_id):
           query = "SELECT * FROM students WHERE student_id = %s"
-          return self.db.execute_query(query, (student_id,), fetch=True)
+          result =  self.db.execute_query(query, (student_id,), fetch=True)
+          if result:
+            print("Student found:")
+            for row in result:
+                print(f"Student ID: {row[0]}, Name: {row[1]}, Grade: {row[2]}, Email: {row[3]}, Age: {row[4]}, Class ID: {row[5]}")
+            return result
+          else:
+            print(f"Student ID '{student_id}' Not Found ! ")
+            return None
+        #>>>>>>>>>>>>>>> Check in database to see if id is valid or not <<<<<<<
+     def is_student_id_valid(self, student_id):
+        query = "SELECT COUNT(*) FROM students WHERE student_id = %s"
+        result = self.db.execute_query(query, (student_id,), fetch=True)
+        return result[0][0] > 0 
      
 ######................>>>>  teacher         
 class Teacher (person, Class):

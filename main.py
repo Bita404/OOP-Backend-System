@@ -103,15 +103,26 @@ def student_menu():
       #>>>>>>...............................ADD STUDENT  
         if choice == "1":
             name =input("Enter Student name:")
-            grade = input("Enter student Grade:")
+            age = int(input("Enter Student Age :"))
             email = input("Enter student Email:")
-            age = input("Enter Student Age :")
+            grade = int(input("Enter student Grade:"))
             class_id =input("Enter Student class ID")
-            
+            try :
+                S = Student(dbb , name, grade, email, age  ,class_id)
+                S.add_stu()
+            except ValueError as e :
+               print(e)
             
         #>>>>....................................EDIT STUDENT
         elif choice == "2":
-            pass
+            Student_id =input("Enter The Student ID:")
+            field = input("Enter The field To Update:")
+            value =input("Enter The new Value:")
+            try:   
+                 S = Student(dbb , "", 0, "" , 0 )
+                 S.edit_stu(Student_id , field, value)
+            except ValueError as e: 
+                print(e)
         #>>>>>......................................REMOVE STUDENT
         elif choice == "3":
             pass
