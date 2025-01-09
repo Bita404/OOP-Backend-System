@@ -76,6 +76,8 @@ def class_menu():
             if result:
                 for row in result:
                   print(row)
+            else :
+                print("No Class Found !")      
          #>..........................................SEARCH 
         elif choice == "5":
             class_id=input("Enter the class ID to search:")
@@ -125,13 +127,26 @@ def student_menu():
                 print(e)
         #>>>>>......................................REMOVE STUDENT
         elif choice == "3":
-            pass
+            Student_id =input("Enter student ID:")
+            try :
+                S = Student(dbb ,"" ,0,"",0)
+                S.remove_stu
+            except ValueError as e :
+                print(e)    
         #>>>>>>.......................................DISPLAY STUDENTS TABLE
         elif choice == "4":
-            pass
+            query = "SELECT * FROM students"
+            result = dbb.execute_query(query, fetch=True)
+            if result:
+                for row in result:
+                    print(f"Student ID: {row[0]}, Name: {row[1]}, Grade: {row[2]}, Email: {row[3]}, Age: {row[4]}, Class ID: {row[5]}")
+            else:
+                print("No students found.")
         #>>>>>>..........................................SEARCH
         elif choice == "5":
-            pass
+            student_id = input("Enter Student ID:")
+            S= Student(dbb,"",0,"",0)
+            S.search_stu(student_id) 
         ####...................BACK
         elif choice == "6":
             break
