@@ -180,16 +180,16 @@ class Student(person , Class):
      ###.....................................................................     
      def remove_stu (self, student_id):
          if not self.is_student_id_valid(student_id):
-            print(f"Student ID '{student_id}' does not exist.")
+            print(f"Student ID '{student_id}' INVALID !")
             return
          query = "DELETE FROM students WHERE student_id = %s"
          self.db.execute_query(query, (student_id,))
-         print(f"Student {student_id} removed successfully.")
+         print(f"Student {student_id} Removed !")
      #........................................................................    
      def edit_stu (self, student_id, field, value):
-          """ Updates a specific field of the student record """
+          """ Update """
           if not self.is_student_id_valid(student_id):
-            print(f"Student ID '{student_id}' does not exist.")
+            print(f"Student ID '{student_id}' does Not exist !")
             return
         
           if field not in ["name", "grade", "email", "age", "class_id"]:
@@ -198,6 +198,7 @@ class Student(person , Class):
           query = f"UPDATE students SET {field} = %s WHERE student_id = %s"
           data = (value, student_id)
           self.db.execute_query(query, data)
+          print("Student Updated")
        #........................................................................................   
      def search_stu (self , student_id):
           query = "SELECT * FROM students WHERE student_id = %s"
@@ -216,7 +217,7 @@ class Student(person , Class):
         result = self.db.execute_query(query, (student_id,), fetch=True)
         return result[0][0] > 0 
      
-######.............>>>>>>>>>>>>>>>>>>>>>>>.>>>>  TEACHER CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
+######.............>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.>>>>  TEACHER CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
 class Teacher (person, Class):
      teacherID_list = {}
      Last_teacherID = 1000
@@ -247,12 +248,18 @@ class Teacher (person, Class):
           print(f"Teacher Added Successfully! ")
     ###.......................................REMOVE...........TEACHERRRR.............................   
      def remove_t(self, teacher_id):
+          if not self.is_TEACHER_valid(teacher_id):
+              print(f"INVALID ID '{teacher_id}' !")
+              return
           query = "DELETE FROM teachers WHERE teacher_id = %s"
           self.db.execute_query(query, (teacher_id,))
-          print(f"Teacher {teacher_id} removed successfully.")
+          print(f"Teacher {teacher_id} Removed !")
      ##.............................................EDIT TEACHERRRRRRR...............................     
      def edit_t(self,teacher_id , field , value):
-          """Updates a specific field of the teacher record"""
+         
+          if not self.is_TEACHER_valid(teacher_id):
+              print(f"INVALID ID '{teacher_id}' !")
+              return
           valid_fields = ["name", "email", "age", "course_id", "class_id"]
         
           if field not in valid_fields:
@@ -261,11 +268,20 @@ class Teacher (person, Class):
           query = f"UPDATE teachers SET {field} = %s WHERE teacher_id = %s"
           data = (value, teacher_id)
           self.db.execute_query(query, data)
+          print("Teacher Updated")
        ##.........................................SEARCHHHHHH................................   
      def search_t(self, teacher_id):
           query = "SELECT * FROM teachers WHERE teacher_id = %s"
           data = (teacher_id,)
-          return self.db.execute_query(query, data, fetch=True)
+          result = self.db.execute_query(query, data, fetch=True)
+          if result:
+            print("Teacher Found:")
+            for row in result:
+                print(f"Teacher ID: {row[0]}, Name: {row[1]}, email: {row[2]}, age: {row[3]},Class ID: {row[4]},Course ID:{row[5]}")
+            return result
+          else:
+            print(f"Teacher ID '{teacher_id}' Not Found ! ")
+            return None
       #.............................................VALIDATE TEACHERRRR.........................
      def is_TEACHER_valid(self, teacher_id):
         query = "SELECT COUNT(*) FROM teachers WHERE teacher_id = %s"

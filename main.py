@@ -95,7 +95,7 @@ def class_menu():
         else:
             print("womp womp ! Invalid choice!")
           
-  #>>>>>>>>>>>.........................................STUDENT MENU........................................          
+  #>>>>>>>>>>>......................>>>>>>>>>>>   STUDENT MENU   ....<<<<<<<<<<<<<<<<<<<<...................          
 def student_menu():
     while True:
         print("\n=====> Student Management <=====")
@@ -126,7 +126,7 @@ def student_menu():
             field = input("Enter The field To Update:")
             value =input("Enter The new Value:")
             try:   
-                 S = Student(dbb , "", 0, "" , 0 )
+                 S = Student(dbb , "", 0, "" , 0 ,"")
                  S.edit_stu(Student_id , field, value)
             except ValueError as e: 
                 print(e)
@@ -134,8 +134,8 @@ def student_menu():
         elif choice == "3":
             Student_id =input("Enter student ID:")
             try :
-                S = Student(dbb ,"" ,0,"",0)
-                S.remove_stu
+                S = Student(dbb ,"" ,0,"",0,"")
+                S.remove_stu(Student_id)
             except ValueError as e :
                 print(e)    
         #>>>>>>.......................................DISPLAY STUDENTS TABLE
@@ -146,7 +146,7 @@ def student_menu():
                 for row in result:
                     print(f"Student ID: {row[0]}, Name: {row[1]}, Grade: {row[2]}, Email: {row[3]}, Age: {row[4]}, Class ID: {row[5]}")
             else:
-                print("No students found.")
+                print("No students Found !")
         #>>>>>>..........................................SEARCH
         elif choice == "5":
             student_id = input("Enter Student ID:")
@@ -158,7 +158,7 @@ def student_menu():
         else:
             print("Invalid choice! Womp Womp !!!!!!!!")
             
-  #>>>>>>>>>>>>>>.............TEACHER MENU          
+  #>>>>>>>>>>>>>>..............>>>>>>>>>>>>>>>>>>>>   TEACHER MENU  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<         
 def teacher_menu():
     while True:
         print("\n=====> Teacher Management <=====")
@@ -170,6 +170,7 @@ def teacher_menu():
         print("6. Back to Main Menu")
 
         choice = input("Enter your choice: ")
+        #>>>>>>..........................ADD TEACHER
         if choice == "1":
             name = input("Enter Teacher Name:")
             email= input("Enter Teacher's Email:")
@@ -180,21 +181,46 @@ def teacher_menu():
                 T.add_t()
             except ValueError as e:
                 print(e)
-                    
+        #>>>....................................EDIT TEACHER            
         elif choice == "2":
-            pass
+            teacher_id = input("Enter Teacher ID:")
+            field = input("Enter The field To Update:")
+            value =input("Enter The new Value:")
+            try:   
+                 T = Teacher(dbb , "", "", 0 , "")
+                 T.edit_t(teacher_id , field, value)
+            except ValueError as e: 
+                print(e)
+        ##>>>....................................REMOVE T
         elif choice == "3":
-            pass
+            teacher_id =input("Enter the Teacher ID:")
+            try:
+                T=Teacher(dbb, "", "",0,"")
+                T.remove_t(teacher_id)
+            except ValueError as e :
+                print(e)    
+            
+        ##>>....................................DISPLAYYYYY T
         elif choice == "4":
-            pass
+            query = "SELECT * FROM teachers"
+            result = dbb.execute_query(query, fetch=True)
+            if result:
+                for row in result:
+                    print(f"Teacher ID: {row[0]}, Name: {row[1]}, Email: {row[2]}, age: {row[3]}, Class ID: {row[4]}, Course ID: {row[5]}")
+            else:
+                print("No Teachers Found ! !")
+        ##>>.........................................SEARCH T
         elif choice == "5":
-            pass
+            teacher_id =input("Enter the Teacher ID:")
+            T=Teacher(dbb, "", "",0,"")
+            T.search_t(teacher_id)
+       ##>>....................................BACK TO MAIN     
         elif choice == "6":
             break
         else:
-            print("Invalid choice! Please try agai ! ! womp")
+            print("Invalid choice! Please try again ! ! womp")
             
-   #>>>>>>>>>........COURSE MENU         
+   #>>>>>>>>>.......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  COURSE MENU  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
 def course_menu():
     while True:
         print("\n=====> Course Management <=====")
