@@ -56,9 +56,13 @@ def class_menu():
             class_id =input("Enter The class ID that you want to Update:")
             field = input("Enter The field To Update:")
             value =input("Enter The new Value :")
-            try:   
+            try:  
+                 if field == "class_capacity":
+                    value = int(value)
+                     
                  C = Class(dbb , class_id, "" , 0 )
                  C.edit_class(class_id , field, value)
+                 
             except ValueError as e: 
                 print(e) 
           #>........................................REMOVE CLASS        
@@ -74,6 +78,7 @@ def class_menu():
             query = "SELECT * FROM classes"
             result = dbb.execute_query(query, fetch=True)
             if result:
+                print("\nAll Classes:")
                 for row in result:
                   print(row)
             else :

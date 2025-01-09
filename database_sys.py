@@ -71,7 +71,7 @@ class DB_connection:
             self.connection.close()
             self.logger.write_log("close", "Database connection closed")
 #.........................................................................................................               
-########>>>>>>>>>>>>>>> base class for any person in the system               
+########>>>>>>>>>>>>>>> base class for any PERSON in the system <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<               
 class person :
      def __init__(self , name, email , age):
           self.name = name
@@ -82,9 +82,9 @@ class person :
           return f"person name:{self.name}, {self.age} years old, with email: {self.email}"  
      
  #.................................................................................................                      
- ######................>>>>  CLASS (base class for teacher and student)    
+ ######................>>>>  CLASS CLASS (base class for teacher and student) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   
 class Class :
-     #classID_list = {} its already in the database 
+     #classID_list ={}
      def __init__(self ,db , class_id , class_name , class_capacity ):
           
               if not isinstance(class_capacity, int) or class_capacity < 0:
@@ -101,21 +101,34 @@ class Class :
           """
           data = (self.class_id, self.class_name, self.class_capacity)
           self.db.execute_query(query, data)
+          print(f"Class '{self.class_name}' Added successfully, ID: {self.class_id}")
           #Class.classID_list[self.class_id] = self
-          
+       #...........................................REMOVE CLASS.................................   
      def remove_class(self , class_id):
+         
+          if not self.is_class_id_valid(class_id):
+            print(f"Class ID '{class_id}' does not exist.")
+            return
           query = "DELETE FROM classes WHERE class_id = %s"
           data = (class_id,)
           self.db.execute_query(query, data)
-          
+          print(f"Class ID :'{class_id}' Removed Successfully !")
+       #...............................................EDIT CLASS..........................   
      def edit_class(self, class_id, field, value):
+         
+          if not self.is_class_id_valid(class_id):
+            print(f"Class ID '{class_id}' does not exist.")
+            return
+        
           if field not in ["class_name", "class_capacity"]:
             raise ValueError(f"Invalid field '{field}' provided for update.")
 
           query = f"UPDATE classes SET {field} = %s WHERE class_id = %s"
           data = (value, class_id)
           self.db.execute_query(query, data)
+          print(f"Class :'{class_id}' Updated !")
           
+       #.............................................SEARCH CLASS.......................   
      def search_class(self , class_id):
           query = "SELECT * FROM classes WHERE class_id = %s"
           data = (class_id,)
@@ -127,6 +140,13 @@ class Class :
           else:
                 print(f"\n No class found with ID: {self.class_id}")
                 return None
+       #.......................................VALIDATE CLASS......................
+     def is_class_id_valid(self, class_id):   #########Check the classes table to see if ID is valid or no 
+         
+        query = "SELECT COUNT(*) FROM classes WHERE class_id = %s"
+        result = self.db.execute_query(query, (class_id,), fetch=True)
+        return result[0][0] > 0       
+    
  ######................>>>> Student                      
 class Student(person , Class):
      stu_list ={}
