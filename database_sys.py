@@ -176,8 +176,8 @@ class Student(person , Class):
           """
           data = (self.student_id, self.name, self.grade, self.email, self.age, self.class_id)
           self.db.execute_query(query, data)
-          print(f"Student added successfully! Assigned Student ID: {self.student_id}")
-          
+          print(f"Student Added successfully! Student ID: {self.student_id}")
+     ###.....................................................................     
      def remove_stu (self, student_id):
          if not self.is_student_id_valid(student_id):
             print(f"Student ID '{student_id}' does not exist.")
@@ -185,7 +185,7 @@ class Student(person , Class):
          query = "DELETE FROM students WHERE student_id = %s"
          self.db.execute_query(query, (student_id,))
          print(f"Student {student_id} removed successfully.")
-         
+     #........................................................................    
      def edit_stu (self, student_id, field, value):
           """ Updates a specific field of the student record """
           if not self.is_student_id_valid(student_id):
@@ -198,7 +198,7 @@ class Student(person , Class):
           query = f"UPDATE students SET {field} = %s WHERE student_id = %s"
           data = (value, student_id)
           self.db.execute_query(query, data)
-          
+       #........................................................................................   
      def search_stu (self , student_id):
           query = "SELECT * FROM students WHERE student_id = %s"
           result =  self.db.execute_query(query, (student_id,), fetch=True)
@@ -216,22 +216,21 @@ class Student(person , Class):
         result = self.db.execute_query(query, (student_id,), fetch=True)
         return result[0][0] > 0 
      
-######................>>>>  teacher         
+######.............>>>>>>>>>>>>>>>>>>>>>>>.>>>>  TEACHER CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
 class Teacher (person, Class):
      teacherID_list = {}
      Last_teacherID = 1000
      def __init__(self ,db ,name , email ,age, class_id ):
           super().__init__(name , email, age)
           Class.__init__(class_id)
-          if class_id in Class.classID_list :
-             self.db = db
-             self.teacher_id = Teacher.TID_gen()
-             self.course_id = None
-             self.class_id = class_id
-             Teacher.teacherID_list[self.teacher_id] = self
-          else :
-             raise ValueError(f"'{self.class_id}' Invalid Class ID ! ! make the class first !")   
-          
+          if not isinstance(age, int) or  age<20 or age>60 :
+                 raise ValueError("Invalid age! teacher age must be between 20 to 60 ! ! ") 
+          self.db = db
+          self.teacher_id = Teacher.TID_gen()
+          self.course_id = None
+          self.class_id = class_id
+          Teacher.teacherID_list[self.teacher_id] = self
+  
      @classmethod     
      def TID_gen(cls):
         teacher_id = "T" + str(cls.Last_teacherID)
@@ -245,12 +244,13 @@ class Teacher (person, Class):
           """
           data = (self.teacher_id, self.name, self.email, self.age, self.class_id, self.course_id)
           self.db.execute_query(query, data)
-          
+          print(f"Teacher Added Successfully! ")
+    ###.......................................REMOVE...........TEACHERRRR.............................   
      def remove_t(self, teacher_id):
           query = "DELETE FROM teachers WHERE teacher_id = %s"
           self.db.execute_query(query, (teacher_id,))
           print(f"Teacher {teacher_id} removed successfully.")
-          
+     ##.............................................EDIT TEACHERRRRRRR...............................     
      def edit_t(self,teacher_id , field , value):
           """Updates a specific field of the teacher record"""
           valid_fields = ["name", "email", "age", "course_id", "class_id"]
@@ -261,12 +261,18 @@ class Teacher (person, Class):
           query = f"UPDATE teachers SET {field} = %s WHERE teacher_id = %s"
           data = (value, teacher_id)
           self.db.execute_query(query, data)
-          
+       ##.........................................SEARCHHHHHH................................   
      def search_t(self, teacher_id):
           query = "SELECT * FROM teachers WHERE teacher_id = %s"
           data = (teacher_id,)
           return self.db.execute_query(query, data, fetch=True)
- ######................>>>>  course    
+      #.............................................VALIDATE TEACHERRRR.........................
+     def is_TEACHER_valid(self, teacher_id):
+        query = "SELECT COUNT(*) FROM teachers WHERE teacher_id = %s"
+        result = self.db.execute_query(query, (teacher_id,), fetch=True)
+        return result[0][0] > 0 
+    
+ ######.......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COURSE CLASS  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  
 class Course(Class):
      course_list = {}
      def __init__(self, db , course_name , total_hours , course_id , teacher_id, class_id):  

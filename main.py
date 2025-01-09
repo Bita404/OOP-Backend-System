@@ -171,7 +171,16 @@ def teacher_menu():
 
         choice = input("Enter your choice: ")
         if choice == "1":
-            pass
+            name = input("Enter Teacher Name:")
+            email= input("Enter Teacher's Email:")
+            age =int(input("Enter teacher age:"))
+            class_id =input("Enter teacher's Class ID:")
+            try :
+                T = Teacher(dbb ,name , email ,age, class_id )
+                T.add_t()
+            except ValueError as e:
+                print(e)
+                    
         elif choice == "2":
             pass
         elif choice == "3":
