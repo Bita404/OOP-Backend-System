@@ -1,6 +1,6 @@
 from database_sys import *
 
-##>>>>>>>>>>>>>>  main menu provide 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+##>>>>>>>>>>>>>>>>>>  main menu provides 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 def main_menu():
     while True:
@@ -322,9 +322,10 @@ def report_menu():
                 print(e)
                   
         elif choice == "3":
+            student_id =input("Enter student ID: ")
             try:
               R=Reporting(dbb)
-              R.summarize_student_performance()
+              R.summarize_student_performance(student_id)
             except ValueError as e :
                  print(e)
                    

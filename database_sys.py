@@ -148,9 +148,7 @@ class Class :
     
  ######................>>>>>>>>>>>>>>>>>>>>>>> Student <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                      
 class Student(person , Class):
-     #stu_list ={}
-     #Last_stuID = 1404000
-     
+
      def __init__(self ,db, name , grade , email ,age, student_id, class_id ):
           super().__init__(name , email , age)
           Class.__init__(self ,db, class_id,"",0)
@@ -159,18 +157,12 @@ class Student(person , Class):
                  raise ValueError("Invalid Age or grade Number ! !  ")
              
           self.db = db
-          self.student_id =  student_id #Student.StuID_gen() useless method
+          self.student_id =  student_id 
           self.grade = grade
           self.age =age
           self.email = email
           self.class_id = class_id 
 
-    # @classmethod       >>>>>>>>>>>>>>>>>> this method resets after ending the program 
-     #def StuID_gen(cls):                       not a good idea for SQL DB primery keys
-      #  Student_id = "S" + str(cls.Last_stuID)
-       # cls.Last_stuID += 1 
-        #return Student_id
-        
      def add_stu (self):
          
           if not self.is_class_id_valid(self.class_id):
@@ -230,23 +222,16 @@ class Student(person , Class):
      
 ######.............>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.>>>>  TEACHER CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
 class Teacher (person, Class):
-     #teacherID_list = {}
-     #Last_teacherID = 1000
+
      def __init__(self ,db ,name , email ,age, teacher_id ,class_id ):
           super().__init__(name , email, age)
           Class.__init__(self ,db, class_id,"",0)
           
           self.db = db
-          self.teacher_id =  teacher_id  #Teacher.TID_gen() >>> useless method
+          self.teacher_id =  teacher_id  
           self.course_id = None
           self.class_id = class_id
-          #Teacher.teacherID_list[self.teacher_id] = self
-  
-     #@classmethod     ##### if u run the code more than once this ID generator resets T T 
-     #def TID_gen(cls):
-      #  teacher_id = "T" + str(cls.Last_teacherID)
-       # cls.Last_teacherID += 1 
-        #return teacher_id
+
        #.....................................................................   
      def add_t(self):
           if not self.is_class_id_valid(self.class_id):
@@ -318,7 +303,7 @@ class Course(Class):
           self.course_name = course_name
           self.total_hours = total_hours 
           self.course_id = course_id
-          #Course.course_list[course_id] = self
+
           self.class_id = class_id
           self.teacher_id = teacher_id  
           
@@ -559,7 +544,7 @@ class Reporting:
         else:
             print(f"\nNo data for student ID {student_id} !")
             
-            
+##################test...................................................            
 logger = Logger()
 
 dbb = DB_connection("root", "Bita1380", "localhost", "school_sys", logger)
