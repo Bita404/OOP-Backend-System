@@ -302,6 +302,9 @@ class Course(Class):
 
           if not self.is_class_id_valid(class_id):
               raise ValueError(f"ID Error: Invalid Class ID '{class_id}'!")
+          #####............. totar must be number and +
+          if not isinstance(total_hours, int) or total_hours <= 0:
+            raise ValueError("Invalid total hours! It must be a positive integer!!!!")
         
           self.course_name = course_name
           self.total_hours = total_hours 
@@ -309,13 +312,15 @@ class Course(Class):
           Course.course_list[course_id] = self
           self,class_id = class_id
           self.teacher_id = teacher_id  
- 
+          
+     def add_course(self):
           query = """
             INSERT INTO courses (course_id, course_name, total_hours, teacher_id ,class_id)
             VALUES (%s, %s, %s, %s, %s)
           """
           data = (self.course_id, self.course_name, self.total_hours, self.teacher_id, self.class_id)
           self.db.execute_query(query, data)
+          
           #>>>>>> need to add the new course to teacher aswell
           update_query = "UPDATE teachers SET course_id = %s WHERE teacher_id = %s"
           update_data = (self.course_id, self.teacher_id)
@@ -341,10 +346,13 @@ class Course(Class):
           if field not in ["course_name", "total_hours", "teacher_id", "class_id"]:
              raise ValueError(f"Invalid field '{field}' ! ")
          
-          if field == "teacher_id" and not self.is_Teacher_valid(value):
-            raise ValueError(f"Invalid Teacher ID '{value}'!")
-          if field == "class_id" and not self.is_class_id_valid(value):
-            raise ValueError(f"Invalid Class ID '{value}'!")
+          if field == "total_hours":
+            if not isinstance(value, int) or value <= 0:
+                raise ValueError("Invalid total hours! It must be a positive integer.")
+          elif field == "teacher_id" and not self.is_teacher_id_valid(value):
+                raise ValueError(f"Invalid Teacher ID '{value}'!")
+          elif field == "class_id" and not self.is_class_id_valid(value):
+                raise ValueError(f"Invalid Class ID '{value}'!")
 
           query = f"UPDATE courses SET {field} = %s WHERE course_id = %s"
           data = (value, course_id)

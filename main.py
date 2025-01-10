@@ -232,16 +232,59 @@ def course_menu():
         print("6. Back to Main Menu")
 
         choice = input("Enter your choice: ")
+        ###>>.....................................ADD COURSE
         if choice == "1":
-            pass
+            course_name = input("Enter name for the course:")
+            total_hours = input("Enter the course total hour:")
+            course_id = input("Enter an ID for the course:")
+            teacher_id = input("Enter The teacher ID for the course:")
+            class_id =input("Enter Class ID for the course:")
+            try:
+               CC=Course(dbb, course_name ,total_hours,course_id, teacher_id, class_id )
+               CC.add_course()
+            except ValueError as e:
+                print(e)   
+               
+        ###>>.................................EDIT COURSE                              
         elif choice == "2":
-            pass
+            course_id = input("Enter the Course ID to update: ")
+            field = input("Enter the field(course_name, total_hours, teacher_id, class_id): ")
+            value = input("Enter the new value: ")
+            try:
+                if field in ["total_hours"]:
+                    value = int(value)  
+                    
+                CC = Course(dbb, "", 0, course_id, "", "")
+                CC.edit_course(course_id, field, value)
+                
+            except ValueError as e:
+                print(e)
+        ##>>>......................................RENOVE COURSE
         elif choice == "3":
-            pass
+            course_id =input("Enter the course ID:")
+            try:
+                CC=Course(dbb, "", 0, course_id, "", "")
+                CC.remove_class(class_id)
+                
+            except ValueError as e:
+                print(e)        
+        ##>>.........................................DISPLAY
         elif choice == "4":
-            pass
+            query = "SELECT * FROM courses"
+            result = dbb.execute_query(query, fetch=True)
+            if result:
+                print("\nAll Courses:")
+                for row in result:
+                    print(f"Course ID: {row[0]}, Name: {row[1]}, Total Hours: {row[2]}, Teacher ID: {row[3]}, Class ID: {row[4]}")
+            else:
+                print("No courses found!")
+        ##>>.............................................SEARCH
         elif choice == "5":
-            pass
+            
+            course_id=input("Enter Course ID:")
+            C = Course(dbb, "", 0, course_id, "", "")
+            C.search_course(course_id)
+        ##>>..............................................BACK
         elif choice == "6":
             break
         else:
@@ -251,7 +294,7 @@ def course_menu():
 def report_menu():
     while True:
         print("\n=====> Reports and Visualization <=====")
-        print("\n1. View Class-wise Student List")
+        print("\n1. View Class Student List")
         print("2. View Teacher Assignments")
         print("3. View Course Enrollments")
         print("4. Generate Summary Report")
