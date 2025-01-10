@@ -19,8 +19,11 @@ This is the main progaram , an OOP based Python code that provides:
 - Class Teacher
 - Class Course
 - Class Reporting : this class contains 2 parts part1 for CSV Reports and part2 for vizualization
+## SQL Database 
+
 ## main.py
 This file contains the main menu code. The manu is made for easier use of the program (database_sys.py)
 - Main menu: provides 6 options and the first 5 options has their own menu with other diffrent options.
 - the menu has atleast more than 35 Options for all the operations
-## Mongodb ver  
+## with mongodb 
+this program has same functionality like the database_sys.py but made with mongoDB 
