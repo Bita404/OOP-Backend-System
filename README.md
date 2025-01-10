@@ -17,7 +17,7 @@ This is the main progaram , an OOP based Python code that provides:
 - Class Class for managing Class ID , class capacity and Class name
 - Class Students
 - Class Teacher
-- Class Course
+- Class Course 
 - Class Reporting : this class contains 2 parts part1 for CSV Reports and part2 for vizualization
 ### any of Class,Student,Teacher and Course classes contain All the CRUD opertaion(Add,Remove,Update,Display and Search) Functions in their Class and they also got defs for checking validations of each users ID befor running the CRUD opperations to avoid mistakes
 ## SQL Database (schoool_sys.sql)
