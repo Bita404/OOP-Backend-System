@@ -293,25 +293,23 @@ class Course(Class):
      course_list = {}
      def __init__(self, db , course_name , total_hours , course_id , teacher_id, class_id):  
           Class.__init__(class_id)
-          if course_id not in Course.course_list:
-               if teacher_id in Teacher.teacherID_list:
-                   if class_id in Class.classID_list: 
-                       self.db = db 
-                       self.course_name = course_name
-                       self.total_hours = total_hours 
-                       self.course_id = course_id
-                       Course.course_list[course_id] = self
-                       self,class_id = class_id
-                       self.teacher_id = teacher_id  
-                   else:
-                        raise ValueError("ID Error ! ! Invalid Class ID !")  
-               else :
-                    raise ValueError("ID Error! Invaild Teacher ID ! ")     
-                         
-          else :
-               raise ValueError("ID Error!!! This Course ID already Exists ! ! !")
-            
-     def add_course(self):
+          self.db = db 
+          if self.is_course_id_valid(course_id):
+            raise ValueError(f"ID Error: Course ID '{course_id}' already exists!")
+
+          if not self.is_Teacher_valid(teacher_id):
+              raise ValueError(f"ID Error: Invalid Teacher ID '{teacher_id}'!")
+
+          if not self.is_class_id_valid(class_id):
+              raise ValueError(f"ID Error: Invalid Class ID '{class_id}'!")
+        
+          self.course_name = course_name
+          self.total_hours = total_hours 
+          self.course_id = course_id
+          Course.course_list[course_id] = self
+          self,class_id = class_id
+          self.teacher_id = teacher_id  
+ 
           query = """
             INSERT INTO courses (course_id, course_name, total_hours, teacher_id ,class_id)
             VALUES (%s, %s, %s, %s, %s)
@@ -322,28 +320,67 @@ class Course(Class):
           update_query = "UPDATE teachers SET course_id = %s WHERE teacher_id = %s"
           update_data = (self.course_id, self.teacher_id)
           self.db.execute_query(update_query, update_data)
-          self.db.logger.write_log("add_course", f"Course {self.course_id} added successfully and teacher {self.teacher_id} updated with course_id.")
           
+          print(f"Course '{self.course_name}' (ID: {self.course_id}) added successfully!")
+      #....................................................ADD......................    
      def remove_course(self, course_id):
+         
+          if not self.is_course_id_valid(course_id):
+            print(f"ID Error: Course ID '{course_id}' does Not exist !!!!")
+            return
           query = "DELETE FROM courses WHERE course_id = %s"
           data = (course_id,)
           self.db.execute_query(query, data)
-          
+          print(f"Course ID '{course_id}' removed successfully.")
+      #....................................................EDIT...............    
      def edit_course (self, course_id, field, value):
+         
+          if not self.is_course_id_valid(course_id):
+            print(f"ID Error: Course ID '{course_id}' does Not exist ! !")
+            return
           if field not in ["course_name", "total_hours", "teacher_id", "class_id"]:
-             raise ValueError(f"Invalid field '{field}' provided for update.")
+             raise ValueError(f"Invalid field '{field}' ! ")
+         
+          if field == "teacher_id" and not self.is_Teacher_valid(value):
+            raise ValueError(f"Invalid Teacher ID '{value}'!")
+          if field == "class_id" and not self.is_class_id_valid(value):
+            raise ValueError(f"Invalid Class ID '{value}'!")
 
           query = f"UPDATE courses SET {field} = %s WHERE course_id = %s"
           data = (value, course_id)
           self.db.execute_query(query, data)
-          
+          print(f"Course ID '{course_id}' updated successfully !!!")
+      #..............................................SEARCH...................    
      def search_course (self, course_id):
           query = "SELECT * FROM courses WHERE course_id = %s"
           data = (course_id,)
           result = self.db.execute_query(query, data, fetch=True)
-          return result
+          
+          if result:
+            print("Course Found:")
+            for row in result:
+                print(f"\nCourse ID: {row[0]}, Name: {row[1]}, Total Hours: {row[2]}, Teacher ID: {row[3]}, Class ID: {row[4]}")
+            return result
+          else:
+            print(f"course: {course_id} Not Found ! ")
+            return None
+      #.............................................validate
+     def is_course_id_valid(self, course_id):
+        query = "SELECT COUNT(*) FROM courses WHERE course_id = %s"
+        result = self.db.execute_query(query, (course_id,), fetch=True)
+        return result[0][0] > 0
+
+     def is_Teacher_valid(self, teacher_id):
+        query = "SELECT COUNT(*) FROM teachers WHERE teacher_id = %s"
+        result = self.db.execute_query(query, (teacher_id,), fetch=True)
+        return result[0][0] > 0
+    
+     def is_class_id_valid(self, class_id):
+        query = "SELECT COUNT(*) FROM classes WHERE class_id = %s"
+        result = self.db.execute_query(query, (class_id,), fetch=True)
+        return result[0][0] > 0  
 #........................................................................     
-#####>>>>>>>>>>>>>>>>>>>> Visualization and Reports 
+#####>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Visualization and Reports <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 class Reporting:
     def __init__(self, db):
         self.db = db
