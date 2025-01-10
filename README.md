@@ -18,4 +18,5 @@ This is the main progaram , an OOP based Python code that provides:
 - Class Teacher
 - Class Course
 - Class Reporting : this class contains 2 parts part1 for CSV Reports and part2 for vizualization
-  
+## main.py
+This file contains the main menu code. The manu is made for easier use of the peogram (database_sys.py) and The main menu provides 
