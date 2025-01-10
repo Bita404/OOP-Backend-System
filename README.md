@@ -19,8 +19,8 @@ This is the main progaram , an OOP based Python code that provides:
 - Class Teacher
 - Class Course
 - Class Reporting : this class contains 2 parts part1 for CSV Reports and part2 for vizualization
-## SQL Database 
-
+## SQL Database (schoool_sys.sql)
+this was coded in mysql command line to make the database and its table there fisrt and all the school datas in python code inserted there
 ## main.py
 This file contains the main menu code. The manu is made for easier use of the program (database_sys.py)
 - Main menu: provides 6 options and the first 5 options has their own menu with other diffrent options.
