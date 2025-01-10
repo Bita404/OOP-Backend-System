@@ -7,3 +7,5 @@ It contains visualization and summery Reports to help.
 - matplotlib.pyplot
 - numpy
 - datetime
+- 
+- database_sys ( this is my program which I imported in main.py)
