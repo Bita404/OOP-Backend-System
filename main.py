@@ -13,7 +13,7 @@ def main_menu():
         print("5. Generate Reports and Visualization")
         print("6. Exit")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
         if choice == "1":
             class_menu()
         elif choice == "2":
@@ -41,7 +41,7 @@ def class_menu():
         print("5. Search for a Class")
         print("6. Back to Main Menu")
         #>......................................ADD CLASS
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
         if choice == "1":
             class_id = input("Enter an ID for the Class: ")
             class_name = input("Enter Class Name: ")
@@ -53,9 +53,9 @@ def class_menu():
                 print(e)
          #>......................................EDIT CLASS       
         elif choice == "2":
-            class_id =input("Enter The class ID that you want to Update:")
-            field = input("Enter The field To Update:")
-            value =input("Enter The new Value :")
+            class_id =input("Enter The class ID that you want to Update: ")
+            field = input("Enter The field To Update: ")
+            value =input("Enter The new Value: ")
             try:  
                  if field == "class_capacity":
                     value = int(value)
@@ -67,7 +67,7 @@ def class_menu():
                 print(e) 
           #>........................................REMOVE CLASS        
         elif choice == "3":
-            class_id = input("Enter The class ID to delete:")
+            class_id = input("Enter The class ID to delete: ")
             try:
                C = Class(dbb , class_id, "" , 0 )
                C.remove_class(class_id)
@@ -78,14 +78,14 @@ def class_menu():
             query = "SELECT * FROM classes"
             result = dbb.execute_query(query, fetch=True)
             if result:
-                print("\nAll Classes:")
+                print("\nAll Classes: ")
                 for row in result:
                   print(row)
             else :
                 print("No Class Found !")      
          #>..........................................SEARCH 
         elif choice == "5":
-            class_id=input("Enter the class ID to search:")
+            class_id=input("Enter the class ID to search: ")
             C= Class(dbb , class_id , "" , 0)
             C.search_class(class_id)
 
@@ -106,14 +106,14 @@ def student_menu():
         print("5. Search for a Student")
         print("6. Back to Main Menu")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
       #>>>>>>...............................ADD STUDENT  
         if choice == "1":
-            name =input("Enter Student name:")
-            age = int(input("Enter Student Age :"))
+            name =input("Enter Student name: ")
+            age = int(input("Enter Student Age: "))
             email = input("Enter student Email:")
-            grade = int(input("Enter student Grade:"))
-            class_id =input("Enter Student class ID")
+            grade = int(input("Enter student Grade: "))
+            class_id =input("Enter Student class ID: ")
             try :
                 S = Student(dbb , name, grade, email, age  ,class_id)
                 S.add_stu()
@@ -122,8 +122,8 @@ def student_menu():
             
         #>>>>....................................EDIT STUDENT
         elif choice == "2":
-            Student_id =input("Enter The Student ID:")
-            field = input("Enter The field To Update:")
+            Student_id =input("Enter The Student ID: ")
+            field = input("Enter The field To Update: ")
             value =input("Enter The new Value:")
             try:   
                  S = Student(dbb , "", 0, "" , 0 ,"")
@@ -132,7 +132,7 @@ def student_menu():
                 print(e)
         #>>>>>......................................REMOVE STUDENT
         elif choice == "3":
-            Student_id =input("Enter student ID:")
+            Student_id =input("Enter student ID: ")
             try :
                 S = Student(dbb ,"" ,0,"",0,"")
                 S.remove_stu(Student_id)
@@ -149,7 +149,7 @@ def student_menu():
                 print("No students Found !")
         #>>>>>>..........................................SEARCH
         elif choice == "5":
-            student_id = input("Enter Student ID:")
+            student_id = input("Enter Student ID: ")
             S= Student(dbb,"",0,"",0)
             S.search_stu(student_id) 
         ####...................BACK
@@ -169,13 +169,13 @@ def teacher_menu():
         print("5. Search for a Teacher")
         print("6. Back to Main Menu")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
         #>>>>>>..........................ADD TEACHER
         if choice == "1":
-            name = input("Enter Teacher Name:")
-            email= input("Enter Teacher's Email:")
+            name = input("Enter Teacher Name: ")
+            email= input("Enter Teacher's Email: ")
             age =int(input("Enter teacher age:"))
-            class_id =input("Enter teacher's Class ID:")
+            class_id =input("Enter teacher's Class ID: ")
             try :
                 T = Teacher(dbb ,name , email ,age, class_id )
                 T.add_t()
@@ -183,9 +183,9 @@ def teacher_menu():
                 print(e)
         #>>>....................................EDIT TEACHER            
         elif choice == "2":
-            teacher_id = input("Enter Teacher ID:")
-            field = input("Enter The field To Update:")
-            value =input("Enter The new Value:")
+            teacher_id = input("Enter Teacher ID: ")
+            field = input("Enter The field To Update: ")
+            value =input("Enter The new Value: ")
             try:   
                  T = Teacher(dbb , "", "", 0 , "")
                  T.edit_t(teacher_id , field, value)
@@ -193,7 +193,7 @@ def teacher_menu():
                 print(e)
         ##>>>....................................REMOVE T
         elif choice == "3":
-            teacher_id =input("Enter the Teacher ID:")
+            teacher_id =input("Enter the Teacher ID: ")
             try:
                 T=Teacher(dbb, "", "",0,"")
                 T.remove_t(teacher_id)
@@ -211,7 +211,7 @@ def teacher_menu():
                 print("No Teachers Found ! !")
         ##>>.........................................SEARCH T
         elif choice == "5":
-            teacher_id =input("Enter the Teacher ID:")
+            teacher_id =input("Enter the Teacher ID: ")
             T=Teacher(dbb, "", "",0,"")
             T.search_t(teacher_id)
        ##>>....................................BACK TO MAIN     
@@ -231,14 +231,14 @@ def course_menu():
         print("5. Search for a Course")
         print("6. Back to Main Menu")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
         ###>>.....................................ADD COURSE
         if choice == "1":
-            course_name = input("Enter name for the course:")
-            total_hours = input("Enter the course total hour:")
-            course_id = input("Enter an ID for the course:")
-            teacher_id = input("Enter The teacher ID for the course:")
-            class_id =input("Enter Class ID for the course:")
+            course_name = input("Enter name for the course: ")
+            total_hours = input("Enter the course total hour: ")
+            course_id = input("Enter an ID for the course: ")
+            teacher_id = input("Enter The teacher ID for the course: ")
+            class_id =input("Enter Class ID for the course: ")
             try:
                CC=Course(dbb, course_name ,total_hours,course_id, teacher_id, class_id )
                CC.add_course()
@@ -261,7 +261,7 @@ def course_menu():
                 print(e)
         ##>>>......................................RENOVE COURSE
         elif choice == "3":
-            course_id =input("Enter the course ID:")
+            course_id =input("Enter the course ID: ")
             try:
                 CC=Course(dbb, "", 0, course_id, "", "")
                 CC.remove_class(class_id)
@@ -281,7 +281,7 @@ def course_menu():
         ##>>.............................................SEARCH
         elif choice == "5":
             
-            course_id=input("Enter Course ID:")
+            course_id=input("Enter Course ID: ")
             C = Course(dbb, "", 0, course_id, "", "")
             C.search_course(course_id)
         ##>>..............................................BACK
@@ -294,21 +294,47 @@ def course_menu():
 def report_menu():
     while True:
         print("\n=====> Reports and Visualization <=====")
-        print("\n1. View Class Student List")
-        print("2. View Teacher Assignments")
-        print("3. View Course Enrollments")
-        print("4. Generate Summary Report")
+        print("\n1. Display enrollment trends ")
+        print("2. Analyze teacher workload")
+        print("3. summarize student performance")
+        print("4. Generate All Summary Report with CSV file")
         print("5. Back to Main Menu")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
+        ###..................................................
         if choice == "1":
-            pass
+           try:
+              R=Reporting(dbb)
+              R.display_enrollment_trends()
+           except ValueError as e:
+               print(e)
+                  
         elif choice == "2":
-            pass
+            try:
+              R=Reporting(dbb)
+              R.analyze_teacher_workload()
+            except ValueError as e :
+                print(e)
+                  
         elif choice == "3":
-            pass
+            try:
+              R=Reporting(dbb)
+              R.summarize_student_performance()
+            except ValueError as e :
+                 print(e)
+                   
+        ###.>>>>.........................generate all the Reports into CSV file........
         elif choice == "4":
-            pass
+            try:
+              R=Reporting(dbb)
+              R.class_summary_report()
+              R.teacher_workload_report()
+              R.student_performance_report()
+              R.enrollment_trends_report()
+              
+            except ValueError as e :
+                print(e)  
+         ##...........................BACK
         elif choice == "5":
             break
         else:

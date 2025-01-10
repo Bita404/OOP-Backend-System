@@ -101,8 +101,7 @@ class Class :
           """
           data = (self.class_id, self.class_name, self.class_capacity)
           self.db.execute_query(query, data)
-          print(f"Class '{self.class_name}' Added successfully, ID: {self.class_id}")
-          #Class.classID_list[self.class_id] = self
+          print(f"\nClass '{self.class_name}' Added successfully, ID: {self.class_id}")
        #...........................................REMOVE CLASS.................................   
      def remove_class(self , class_id):
          
@@ -112,21 +111,21 @@ class Class :
           query = "DELETE FROM classes WHERE class_id = %s"
           data = (class_id,)
           self.db.execute_query(query, data)
-          print(f"Class ID :'{class_id}' Removed Successfully !")
+          print(f"\nClass ID :'{class_id}' Removed Successfully !")
        #...............................................EDIT CLASS..........................   
      def edit_class(self, class_id, field, value):
          
           if not self.is_class_id_valid(class_id):
-            print(f"Class ID '{class_id}' does not exist.")
+            print(f"\nClass ID '{class_id}' does Not exist !")
             return
         
           if field not in ["class_name", "class_capacity"]:
-            raise ValueError(f"Invalid field '{field}' provided for update.")
+            raise ValueError(f"Invalid field '{field}' provided for update !")
 
           query = f"UPDATE classes SET {field} = %s WHERE class_id = %s"
           data = (value, class_id)
           self.db.execute_query(query, data)
-          print(f"Class :'{class_id}' Updated !")
+          print(f"\nClass :'{class_id}' Updated !")
           
        #.............................................SEARCH CLASS.......................   
      def search_class(self , class_id):
@@ -147,7 +146,7 @@ class Class :
         result = self.db.execute_query(query, (class_id,), fetch=True)
         return result[0][0] > 0       
     
- ######................>>>> Student                      
+ ######................>>>>>>>>>>>>>>>>>>>>>>> Student <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                      
 class Student(person , Class):
      stu_list ={}
      Last_stuID = 1404000
@@ -157,10 +156,15 @@ class Student(person , Class):
           Class.__init__(class_id)
           if not isinstance(age, int) or not isinstance(grade, int) or grade>100 or grade<0 or age<5 or age>18 :
                  raise ValueError("Invalid Age or grade Number ! !  ")
+             
+          if not self.is_class_id_valid(class_id):
+              raise ValueError(f"ID Error: Invalid Class ID '{class_id}'!")  
+           
           self.db = db
           self.student_id = Student.StuID_gen()
-          Student.stu_list[self.student_id] = self
           self.grade = grade
+          self.age =age
+          self.email = email
           self.class_id = class_id 
 
      @classmethod
@@ -176,7 +180,7 @@ class Student(person , Class):
           """
           data = (self.student_id, self.name, self.grade, self.email, self.age, self.class_id)
           self.db.execute_query(query, data)
-          print(f"Student Added successfully! Student ID: {self.student_id}")
+          print(f"\nStudent Added successfully! Student ID: {self.student_id}")
      ###.....................................................................     
      def remove_stu (self, student_id):
          if not self.is_student_id_valid(student_id):
@@ -184,12 +188,12 @@ class Student(person , Class):
             return
          query = "DELETE FROM students WHERE student_id = %s"
          self.db.execute_query(query, (student_id,))
-         print(f"Student {student_id} Removed !")
+         print(f"\nStudent {student_id} Removed !")
      #........................................................................    
      def edit_stu (self, student_id, field, value):
           """ Update """
           if not self.is_student_id_valid(student_id):
-            print(f"Student ID '{student_id}' does Not exist !")
+            print(f"\nStudent ID '{student_id}' does Not exist !")
             return
         
           if field not in ["name", "grade", "email", "age", "class_id"]:
@@ -198,24 +202,29 @@ class Student(person , Class):
           query = f"UPDATE students SET {field} = %s WHERE student_id = %s"
           data = (value, student_id)
           self.db.execute_query(query, data)
-          print("Student Updated")
+          print("\nStudent Updated")
        #........................................................................................   
      def search_stu (self , student_id):
           query = "SELECT * FROM students WHERE student_id = %s"
           result =  self.db.execute_query(query, (student_id,), fetch=True)
           if result:
-            print("Student found:")
+            print("\nStudent found:")
             for row in result:
                 print(f"Student ID: {row[0]}, Name: {row[1]}, Grade: {row[2]}, Email: {row[3]}, Age: {row[4]}, Class ID: {row[5]}")
             return result
           else:
-            print(f"Student ID '{student_id}' Not Found ! ")
+            print(f"\nStudent ID '{student_id}' Not Found ! ")
             return None
         #>>>>>>>>>>>>>>> Check in database to see if id is valid or not <<<<<<<
      def is_student_id_valid(self, student_id):
         query = "SELECT COUNT(*) FROM students WHERE student_id = %s"
         result = self.db.execute_query(query, (student_id,), fetch=True)
         return result[0][0] > 0 
+    
+     def is_class_id_valid(self, class_id):
+        query = "SELECT COUNT(*) FROM classes WHERE class_id = %s"
+        result = self.db.execute_query(query, (class_id,), fetch=True)
+        return result[0][0] > 0
      
 ######.............>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.>>>>  TEACHER CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
 class Teacher (person, Class):
@@ -268,19 +277,19 @@ class Teacher (person, Class):
           query = f"UPDATE teachers SET {field} = %s WHERE teacher_id = %s"
           data = (value, teacher_id)
           self.db.execute_query(query, data)
-          print("Teacher Updated")
+          print("\nTeacher Updated")
        ##.........................................SEARCHHHHHH................................   
      def search_t(self, teacher_id):
           query = "SELECT * FROM teachers WHERE teacher_id = %s"
           data = (teacher_id,)
           result = self.db.execute_query(query, data, fetch=True)
           if result:
-            print("Teacher Found:")
+            print("\nTeacher Found:")
             for row in result:
                 print(f"Teacher ID: {row[0]}, Name: {row[1]}, email: {row[2]}, age: {row[3]},Class ID: {row[4]},Course ID:{row[5]}")
             return result
           else:
-            print(f"Teacher ID '{teacher_id}' Not Found ! ")
+            print(f"\nTeacher ID '{teacher_id}' Not Found ! ")
             return None
       #.............................................VALIDATE TEACHERRRR.........................
      def is_TEACHER_valid(self, teacher_id):
@@ -326,17 +335,17 @@ class Course(Class):
           update_data = (self.course_id, self.teacher_id)
           self.db.execute_query(update_query, update_data)
           
-          print(f"Course '{self.course_name}' (ID: {self.course_id}) added successfully!")
+          print(f"\nCourse '{self.course_name}' (ID: {self.course_id}) added successfully!")
       #....................................................ADD......................    
      def remove_course(self, course_id):
          
           if not self.is_course_id_valid(course_id):
-            print(f"ID Error: Course ID '{course_id}' does Not exist !!!!")
+            print(f"\nID Error: Course ID '{course_id}' does Not exist !!!!")
             return
           query = "DELETE FROM courses WHERE course_id = %s"
           data = (course_id,)
           self.db.execute_query(query, data)
-          print(f"Course ID '{course_id}' removed successfully.")
+          print(f"\nCourse ID '{course_id}' removed successfully.")
       #....................................................EDIT...............    
      def edit_course (self, course_id, field, value):
          
@@ -357,7 +366,7 @@ class Course(Class):
           query = f"UPDATE courses SET {field} = %s WHERE course_id = %s"
           data = (value, course_id)
           self.db.execute_query(query, data)
-          print(f"Course ID '{course_id}' updated successfully !!!")
+          print(f"\nCourse ID '{course_id}' updated successfully !!!")
       #..............................................SEARCH...................    
      def search_course (self, course_id):
           query = "SELECT * FROM courses WHERE course_id = %s"
@@ -365,12 +374,12 @@ class Course(Class):
           result = self.db.execute_query(query, data, fetch=True)
           
           if result:
-            print("Course Found:")
+            print("\nCourse Found:")
             for row in result:
-                print(f"\nCourse ID: {row[0]}, Name: {row[1]}, Total Hours: {row[2]}, Teacher ID: {row[3]}, Class ID: {row[4]}")
+                print(f"Course ID: {row[0]}, Name: {row[1]}, Total Hours: {row[2]}, Teacher ID: {row[3]}, Class ID: {row[4]}")
             return result
           else:
-            print(f"course: {course_id} Not Found ! ")
+            print(f"\ncourse: {course_id} Not Found ! ")
             return None
       #.............................................validate
      def is_course_id_valid(self, course_id):
@@ -411,9 +420,9 @@ class Reporting:
         if data:
             df = pd.DataFrame(data, columns=["Class ID", "Class Name", "Class Capacity"])
             df.to_csv(filename, index=False)
-            print(f"Class summary report saved to {filename}.")
+            print(f"\nClass summary report saved to {filename}.")
         else:
-            print("No data found for class summary report.")
+            print("\nNo data found for class summary report !!! ")
 
     def teacher_workload_report(self, filename="teacher_workload.csv"):
         query = """
@@ -459,9 +468,9 @@ class Reporting:
             df.to_csv(filename, index=False)
             print(f"Enrollment trends report saved to {filename}.")
         else:
-            print("No data found for enrollment trends report.")
+            print("No data found for enrollment trends report !! ")
 
-    # ----------------- Data Visualization -----------------
+    # ------>>>>>>>>>>>>>>----------- Data Visualization --------<<<<<<<<<<<<<<<<---------
     def display_enrollment_trends(self):
         query = """
             SELECT YEAR(created_at) AS year, COUNT(student_id) AS total_students
@@ -480,7 +489,7 @@ class Reporting:
             plt.grid(True)
             plt.show()
         else:
-            print("No data available to display enrollment trends.")
+            print("\nNo data available to display enrollment trends ! ! ")
 
     def analyze_teacher_workload(self):
         query = """
@@ -512,7 +521,7 @@ class Reporting:
             plt.tight_layout()
             plt.show()
         else:
-            print("No data available to analyze teacher workload.")
+            print("\nNo data available to analyze teacher workload ! ! ")
 
     def summarize_student_performance(self, student_id):
         query = """
@@ -534,7 +543,7 @@ class Reporting:
             plt.grid(True)
             plt.show()
         else:
-            print(f"No performance data available for student ID {student_id}.")
+            print(f"\nNo data for student ID {student_id} !")
             
             
 logger = Logger()
