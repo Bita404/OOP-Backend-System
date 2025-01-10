@@ -148,32 +148,34 @@ class Class :
     
  ######................>>>>>>>>>>>>>>>>>>>>>>> Student <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<                      
 class Student(person , Class):
-     stu_list ={}
-     Last_stuID = 1404000
+     #stu_list ={}
+     #Last_stuID = 1404000
      
-     def __init__(self ,db, name , grade , email ,age, class_id ):
+     def __init__(self ,db, name , grade , email ,age, student_id, class_id ):
           super().__init__(name , email , age)
-          Class.__init__(class_id)
-          if not isinstance(age, int) or not isinstance(grade, int) or grade>100 or grade<0 or age<5 or age>18 :
+          Class.__init__(self ,db, class_id,"",0)
+          
+          if not isinstance(age, int) or not isinstance(grade, int) or grade>100 or grade<0 or age<5 or age>30 :
                  raise ValueError("Invalid Age or grade Number ! !  ")
              
-          if not self.is_class_id_valid(class_id):
-              raise ValueError(f"ID Error: Invalid Class ID '{class_id}'!")  
-           
           self.db = db
-          self.student_id = Student.StuID_gen()
+          self.student_id =  student_id #Student.StuID_gen() useless method
           self.grade = grade
           self.age =age
           self.email = email
           self.class_id = class_id 
 
-     @classmethod
-     def StuID_gen(cls):
-        Student_id = "S" + str(cls.Last_stuID)
-        cls.Last_stuID += 1 
-        return Student_id
+    # @classmethod       >>>>>>>>>>>>>>>>>> this method resets after ending the program 
+     #def StuID_gen(cls):                       not a good idea for SQL DB primery keys
+      #  Student_id = "S" + str(cls.Last_stuID)
+       # cls.Last_stuID += 1 
+        #return Student_id
         
      def add_stu (self):
+         
+          if not self.is_class_id_valid(self.class_id):
+              raise ValueError(f"ID Error: Invalid Class ID '{self.class_id}'!")
+          
           query = """
              INSERT INTO students (student_id, name, grade, email, age, class_id)
              VALUES (%s, %s, %s, %s, %s, %s)
@@ -228,26 +230,31 @@ class Student(person , Class):
      
 ######.............>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.>>>>  TEACHER CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<        
 class Teacher (person, Class):
-     teacherID_list = {}
-     Last_teacherID = 1000
-     def __init__(self ,db ,name , email ,age, class_id ):
+     #teacherID_list = {}
+     #Last_teacherID = 1000
+     def __init__(self ,db ,name , email ,age, teacher_id ,class_id ):
           super().__init__(name , email, age)
-          Class.__init__(class_id)
-          if not isinstance(age, int) or  age<20 or age>60 :
-                 raise ValueError("Invalid age! teacher age must be between 20 to 60 ! ! ") 
+          Class.__init__(self ,db, class_id,"",0)
+          
           self.db = db
-          self.teacher_id = Teacher.TID_gen()
+          self.teacher_id =  teacher_id  #Teacher.TID_gen() >>> useless method
           self.course_id = None
           self.class_id = class_id
-          Teacher.teacherID_list[self.teacher_id] = self
+          #Teacher.teacherID_list[self.teacher_id] = self
   
-     @classmethod     
-     def TID_gen(cls):
-        teacher_id = "T" + str(cls.Last_teacherID)
-        cls.Last_teacherID += 1 
-        return teacher_id
-          
+     #@classmethod     ##### if u run the code more than once this ID generator resets T T 
+     #def TID_gen(cls):
+      #  teacher_id = "T" + str(cls.Last_teacherID)
+       # cls.Last_teacherID += 1 
+        #return teacher_id
+       #.....................................................................   
      def add_t(self):
+          if not self.is_class_id_valid(self.class_id):
+              raise ValueError(f"ID Error: Invalid Class ID '{self.class_id}'!")
+          
+          if not isinstance(self.age, int) or  self.age<20 or self.age>60 :
+                 raise ValueError("Invalid age! teacher age must be between 20 to 60 ! ! ") 
+             
           query = """
             INSERT INTO teachers (teacher_id, name, email, age, class_id, course_id)
             VALUES (%s, %s, %s, %s, %s, %s)
@@ -297,45 +304,52 @@ class Teacher (person, Class):
         result = self.db.execute_query(query, (teacher_id,), fetch=True)
         return result[0][0] > 0 
     
+     def is_class_id_valid(self, class_id):
+        query = "SELECT COUNT(*) FROM classes WHERE class_id = %s"
+        result = self.db.execute_query(query, (class_id,), fetch=True)
+        return result[0][0] > 0  
+    
  ######.......>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> COURSE CLASS  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  
 class Course(Class):
      course_list = {}
      def __init__(self, db , course_name , total_hours , course_id , teacher_id, class_id):  
-          Class.__init__(class_id)
+          Class.__init__(self ,db, class_id,"",0)
           self.db = db 
-          if self.is_course_id_valid(course_id):
-            raise ValueError(f"ID Error: Course ID '{course_id}' already exists!")
-
-          if not self.is_Teacher_valid(teacher_id):
-              raise ValueError(f"ID Error: Invalid Teacher ID '{teacher_id}'!")
-
-          if not self.is_class_id_valid(class_id):
-              raise ValueError(f"ID Error: Invalid Class ID '{class_id}'!")
-          #####............. totar must be number and +
-          if not isinstance(total_hours, int) or total_hours <= 0:
-            raise ValueError("Invalid total hours! It must be a positive integer!!!!")
-        
           self.course_name = course_name
           self.total_hours = total_hours 
           self.course_id = course_id
-          Course.course_list[course_id] = self
-          self,class_id = class_id
+          #Course.course_list[course_id] = self
+          self.class_id = class_id
           self.teacher_id = teacher_id  
           
      def add_course(self):
-          query = """
-            INSERT INTO courses (course_id, course_name, total_hours, teacher_id ,class_id)
-            VALUES (%s, %s, %s, %s, %s)
-          """
-          data = (self.course_id, self.course_name, self.total_hours, self.teacher_id, self.class_id)
-          self.db.execute_query(query, data)
+         
+          if self.is_course_id_valid(self.course_id):
+             raise ValueError(f"ID Error: Course ID '{self.course_id}' already exists!")
+
+          elif not self.is_Teacher_valid(self.teacher_id):
+              raise ValueError(f"ID Error: Invalid Teacher ID '{self.teacher_id}'!")
+
+          elif not self.is_class_id_valid(self.class_id):
+              raise ValueError(f"ID Error: Invalid Class ID '{self.class_id}'!")
+          #####............. totar must be number and +
+          elif not isinstance(self.total_hours, int) or self.total_hours <= 0:
+            raise ValueError("Invalid total hours! It must be a positive integer!!!!")
+        
+          else: 
+           query = """
+             INSERT INTO courses (course_id, course_name, total_hours, teacher_id ,class_id)
+             VALUES (%s, %s, %s, %s, %s)
+           """
+           data = (self.course_id, self.course_name, self.total_hours, self.teacher_id, self.class_id)
+           self.db.execute_query(query, data)
           
           #>>>>>> need to add the new course to teacher aswell
-          update_query = "UPDATE teachers SET course_id = %s WHERE teacher_id = %s"
-          update_data = (self.course_id, self.teacher_id)
-          self.db.execute_query(update_query, update_data)
+           update_query = "UPDATE teachers SET course_id = %s WHERE teacher_id = %s"
+           update_data = (self.course_id, self.teacher_id)
+           self.db.execute_query(update_query, update_data)
           
-          print(f"\nCourse '{self.course_name}' (ID: {self.course_id}) added successfully!")
+           print(f"\nCourse '{self.course_name}' (ID: {self.course_id}) added successfully!")
       #....................................................ADD......................    
      def remove_course(self, course_id):
          

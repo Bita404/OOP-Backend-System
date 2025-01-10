@@ -114,8 +114,9 @@ def student_menu():
             email = input("Enter student Email:")
             grade = int(input("Enter student Grade: "))
             class_id =input("Enter Student class ID: ")
+            student_id=input("Enter an unique ID: ")
             try :
-                S = Student(dbb , name, grade, email, age  ,class_id)
+                S = Student(dbb , name, grade, email, age ,student_id ,class_id)
                 S.add_stu()
             except ValueError as e :
                print(e)
@@ -126,7 +127,7 @@ def student_menu():
             field = input("Enter The field To Update: ")
             value =input("Enter The new Value:")
             try:   
-                 S = Student(dbb , "", 0, "" , 0 ,"")
+                 S = Student(dbb , "", 0, "" , 5 ,Student_id,"")
                  S.edit_stu(Student_id , field, value)
             except ValueError as e: 
                 print(e)
@@ -134,7 +135,7 @@ def student_menu():
         elif choice == "3":
             Student_id =input("Enter student ID: ")
             try :
-                S = Student(dbb ,"" ,0,"",0,"")
+                S = Student(dbb ,"" ,0,"",5,Student_id,"")
                 S.remove_stu(Student_id)
             except ValueError as e :
                 print(e)    
@@ -150,7 +151,7 @@ def student_menu():
         #>>>>>>..........................................SEARCH
         elif choice == "5":
             student_id = input("Enter Student ID: ")
-            S= Student(dbb,"",0,"",0)
+            S= Student(dbb,"",0,"",5,student_id,"")
             S.search_stu(student_id) 
         ####...................BACK
         elif choice == "6":
@@ -175,9 +176,10 @@ def teacher_menu():
             name = input("Enter Teacher Name: ")
             email= input("Enter Teacher's Email: ")
             age =int(input("Enter teacher age:"))
+            teacher_id=input("Enter a Unique ID for teacher: ")
             class_id =input("Enter teacher's Class ID: ")
             try :
-                T = Teacher(dbb ,name , email ,age, class_id )
+                T = Teacher(dbb ,name , email ,age,teacher_id, class_id )
                 T.add_t()
             except ValueError as e:
                 print(e)
@@ -187,7 +189,7 @@ def teacher_menu():
             field = input("Enter The field To Update: ")
             value =input("Enter The new Value: ")
             try:   
-                 T = Teacher(dbb , "", "", 0 , "")
+                 T = Teacher(dbb , "", "", 0 ,teacher_id, "")
                  T.edit_t(teacher_id , field, value)
             except ValueError as e: 
                 print(e)
@@ -195,7 +197,7 @@ def teacher_menu():
         elif choice == "3":
             teacher_id =input("Enter the Teacher ID: ")
             try:
-                T=Teacher(dbb, "", "",0,"")
+                T=Teacher(dbb, "", "",0,teacher_id,"")
                 T.remove_t(teacher_id)
             except ValueError as e :
                 print(e)    
@@ -212,7 +214,7 @@ def teacher_menu():
         ##>>.........................................SEARCH T
         elif choice == "5":
             teacher_id =input("Enter the Teacher ID: ")
-            T=Teacher(dbb, "", "",0,"")
+            T=Teacher(dbb, "", "",0,teacher_id,"")
             T.search_t(teacher_id)
        ##>>....................................BACK TO MAIN     
         elif choice == "6":
@@ -240,8 +242,11 @@ def course_menu():
             teacher_id = input("Enter The teacher ID for the course: ")
             class_id =input("Enter Class ID for the course: ")
             try:
-               CC=Course(dbb, course_name ,total_hours,course_id, teacher_id, class_id )
-               CC.add_course()
+                total_hours = int(total_hours)
+                if total_hours <= 0:
+                   raise ValueError("Total hours must be a positive integer!")
+                CC=Course(dbb, course_name ,total_hours,course_id, teacher_id, class_id )
+                CC.add_course()
             except ValueError as e:
                 print(e)   
                
