@@ -19,7 +19,7 @@ This is the main progaram , an OOP based Python code that provides:
 - Class Teacher
 - Class Course
 - Class Reporting : this class contains 2 parts part1 for CSV Reports and part2 for vizualization
-### any of Class,Student,Teacher and Course contain All the CRUD opertaion(Add,Remove,Update,Display and Search) Functions in their Class and they also got defs for checking validations of each users ID befor running the CRUD opperations to avoid mistakes
+### any of Class,Student,Teacher and Course classes contain All the CRUD opertaion(Add,Remove,Update,Display and Search) Functions in their Class and they also got defs for checking validations of each users ID befor running the CRUD opperations to avoid mistakes
 ## SQL Database (schoool_sys.sql)
 this was coded in mysql command line to make the database and its table there fisrt and all the school datas in python code inserted there
 ## main.py
