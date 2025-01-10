@@ -26,5 +26,7 @@ this was coded in mysql command line to make the database and its table there fi
 This file contains the main menu code. The manu is made for easier use of the program (database_sys.py)
 - Main menu: provides 6 options and the first 5 options has their own menu with other diffrent options.
 - the menu has atleast more than 35 Options for all the operations
+## CSV files
+in the Reporting Class made an option for generationg summery reports from each table in the database 
 ## with mongodb 
 this program has same functionality like the database_sys.py but made with mongoDB 
