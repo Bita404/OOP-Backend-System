@@ -24,8 +24,9 @@ This is the main progaram , an OOP based Python code that provides:
 this was coded in mysql command line to make the database and its table there fisrt and all the school datas in python code inserted there
 ## main.py
 This file contains the main menu code. The manu is made for easier use of the program (database_sys.py)
-- Main menu: provides 6 options and the first 5 options has their own menu with other diffrent options.
+- Main menu: provides 7 options and the first 5 options has their own menu with other diffrent options.
 - the menu has atleast more than 35 Options for all the operations
+- Avdanced Search : helps to search with filter by anything
 ## CSV files
 in the Reporting Class made an option for generationg summery reports from each table in the database 
 ## with mongodb 
