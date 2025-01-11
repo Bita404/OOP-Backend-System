@@ -1,4 +1,7 @@
 from database_sys import *
+########################################################################
+## GITHUB : https://github.com/Bita404/School-Backend-System
+#####################################################################
 
 ##>>>>>>>>>>>>>>>>>>  main menu provides 5 other menus for each class <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -115,11 +118,14 @@ def student_menu():
             grade = int(input("Enter student Grade: "))
             class_id =input("Enter Student class ID: ")
             student_id=input("Enter an unique ID: ")
-            try :
-                S = Student(dbb , name, grade, email, age ,student_id ,class_id)
-                S.add_stu()
-            except ValueError as e :
+            if email_format(email):
+              try :
+                  S = Student(dbb , name, grade, email, age ,student_id ,class_id)
+                  S.add_stu()
+              except ValueError as e :
                print(e)
+            else :
+                print("\nWrong email Format, try again ! ")   
             
         #>>>>....................................EDIT STUDENT
         elif choice == "2":
@@ -178,11 +184,14 @@ def teacher_menu():
             age =int(input("Enter teacher age:"))
             teacher_id=input("Enter a Unique ID for teacher: ")
             class_id =input("Enter teacher's Class ID: ")
-            try :
-                T = Teacher(dbb ,name , email ,age,teacher_id, class_id )
-                T.add_t()
-            except ValueError as e:
-                print(e)
+            if email_format(email):
+                try :
+                   T = Teacher(dbb ,name , email ,age,teacher_id, class_id )
+                   T.add_t()
+                except ValueError as e:
+                   print(e)
+            else :
+                print("\nWrong email Format, try again ! ")       
         #>>>....................................EDIT TEACHER            
         elif choice == "2":
             teacher_id = input("Enter Teacher ID: ")

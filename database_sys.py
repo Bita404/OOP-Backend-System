@@ -3,6 +3,7 @@ import  pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
+import re
 #################################
 # user input oder : 
 # 1.classes   2.person(students , teachers)  3.courses
@@ -18,6 +19,12 @@ class Logger:
             time_now = datetime.now().strftime("%d/%m/%Y--%I:%M-%p")
             text = f"{cmd}: {time_now} | Outcome: {outcome}\n"
             file.write(text)
+            
+#### This for checking email format 
+def email_format(email):
+
+    email_format = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$"
+    return bool(re.match(email_format, email))            
             
 #############>>>>>>> database connection  <<<<<<<<<<#########
 import mysql.connector
@@ -184,7 +191,7 @@ class Student(person , Class):
          self.db.execute_query(query, (student_id,))
          print(f"\nStudent {student_id} Removed !")
      #........................................................................    
-     def edit_stu (self, student_id, field, value):
+     def edit_stu (self, student_id, field, value): 
           """ Update """
           if not self.is_student_id_valid(student_id):
             print(f"\nStudent ID '{student_id}' does Not exist !")
@@ -192,6 +199,10 @@ class Student(person , Class):
         
           if field not in ["name", "grade", "email", "age", "class_id"]:
                raise ValueError(f"Invalid field '{field}' provided for update.")
+           
+          if field == "email":
+             if not email_format(value):
+                raise ValueError("Invalid email format !") 
           
           query = f"UPDATE students SET {field} = %s WHERE student_id = %s"
           data = (value, student_id)
@@ -265,6 +276,10 @@ class Teacher (person, Class):
         
           if field not in valid_fields:
                raise ValueError(f"Invalid field '{field}' provided for update.")
+           
+          if field == "email":
+            if not email_format(value):
+                raise ValueError("Invalid email format") 
         
           query = f"UPDATE teachers SET {field} = %s WHERE teacher_id = %s"
           data = (value, teacher_id)
