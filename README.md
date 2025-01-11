@@ -30,5 +30,7 @@ This file contains the main menu code. The manu is made for easier use of the pr
 in the Reporting Class made an option for generationg summery reports from each table in the database 
 ## with mongodb 
 this program has same functionality like the database_sys.py but made with mongoDB 
+## System.log
+- Logging System Activities
 ## tables.txt 
 the actual tables for this backend system
