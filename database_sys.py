@@ -559,7 +559,44 @@ class Reporting:
         else:
             print(f"\nNo data for student ID {student_id} !")
             
-##################test...................................................            
+##########>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADVANCED SEARCH WITH FILTER <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<            
+class Advanced_Search:
+    def __init__(self, db):
+        self.db = db
+###>>>............. to show cloumns
+    def get_columns(self, table_name):
+
+        query = f"DESCRIBE {table_name}"
+        results = self.db.execute_query(query, fetch=True)  
+        if results:
+            return [row[0] for row in results]  
+        else:
+            raise ValueError(f"Unable to retrieve columns for table '{table_name}'.")
+   ####>>.......................SEARCH
+    def advanced_search(self, table_name, filters=None):
+
+        if table_name not in ["classes", "students", "teachers", "courses"]:
+            raise ValueError("Invalid table name! Only 'classes', 'students', 'teachers', 'courses' are allowed.")
+
+        query = f"SELECT * FROM {table_name}"
+        values = []
+
+        if filters:
+            filter_clauses = [f"{column} = %s" for column in filters.keys()]
+            query += " WHERE " + " AND ".join(filter_clauses)
+            values = list(filters.values())
+
+        results = self.db.execute_query(query, values, fetch=True)
+
+        if results:
+            print(f"Results found in table '{table_name}':")
+            for row in results:
+                print(row)
+        else:
+            print(f"No results found in table '{table_name}' with the given filters: {filters}")
+
+        return results
+################## test...................................................            
 logger = Logger()
 
 dbb = DB_connection("root", "Bita1380", "localhost", "school_sys", logger)

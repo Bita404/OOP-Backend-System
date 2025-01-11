@@ -14,7 +14,8 @@ def main_menu():
         print("3. Manage Teachers")
         print("4. Manage Courses")
         print("5. Generate Reports and Visualization")
-        print("6. Exit")
+        print("6. Advanced Search")
+        print("7. Exit")
 
         choice = input("\nEnter your choice: ")
         if choice == "1":
@@ -28,6 +29,8 @@ def main_menu():
         elif choice == "5":
             report_menu()
         elif choice == "6":
+            perform_advanced_search()   
+        elif choice == "7":
             print("ok...Exiting the program.... bye bye o(╥﹏╥) !")
             break
         else:
@@ -355,6 +358,35 @@ def report_menu():
         else:
             print("Invalid choice! choose Valid Options !!!")
             
+   #>>>>>>>>>>>...................Advanced Search <<<<<<<            
+def perform_advanced_search():
+    print("\n<<<<<  Advanced Search >>>>>")
+    table = input("Enter the table to search (classes, students, teachers, courses): ").strip().lower()
+
+    if table not in ["classes", "students", "teachers", "courses"]:
+        print("\nInvalid table name! Returning to main menu...")
+        return
+
+    school_manager = Advanced_Search(dbb)
+    
+    try:
+        valid_columns = school_manager.get_columns(table)
+    except ValueError as e:
+        print(e)
+        return
+
+    print(f"Available columns in '{table}': {', '.join(valid_columns)}")
+    column = input("Enter the column to filter by: ").strip()
+
+    if column not in valid_columns:
+        print(f"Invalid column name '{column}' for table '{table}'! Returning to main menu...")
+        return
+
+    value = input(f"Enter the value to search for in '{column}': ").strip()
+
+    print(f"Searching in '{table}' where {column} = {value}...")
+    school_manager.advanced_search(table, {column: value})
+     
 #############################################################################################
 if __name__ == "__main__":
     logger = Logger()
