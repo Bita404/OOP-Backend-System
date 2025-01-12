@@ -36,11 +36,11 @@ this program has same functionality like the database_sys.py but made with mongo
 ## tables.txt 
 the actual tables for this backend system
 mysql> show tables;
-+----------------------+
-| Tables_in_school_sys |
-+----------------------+
-| classes              |
-| courses              |
-| students             |
-| teachers             |
-+----------------------+
+- +----------------------+
+- | Tables_in_school_sys |
+- +----------------------+
+- | classes              |
+- | courses              |
+- | students             |
+- | teachers             |
+- +----------------------+
