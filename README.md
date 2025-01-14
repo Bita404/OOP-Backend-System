@@ -2,7 +2,7 @@
 This project is an OOP based backend system for managing school operations like teachers , students , classes and courses.
 It contains all the CRUD operations for each object in the school and also contains visualization, analyzing and summery Reports to help the user.
 Errors  in this project is handled .
-## Libraries 
+## Libraries :books:
 - mysql.connector
 - pandas 
 - matplotlib.pyplot
@@ -31,7 +31,7 @@ This file contains the main menu code. The manu is made for easier use of the pr
   data anlysis and visualizaion for school operation  
 ## CSV files :file_folder:
 in the Reporting Class made an option for generationg summery reports from each table in the database 
-## with mongodb 
+## :chart_with_upwards_trend: with mongodb :chart_with_upwards_trend:
 this program has same functionality like the database_sys.py but made with mongoDB 
 ## System.log
 - Logging System Activities
