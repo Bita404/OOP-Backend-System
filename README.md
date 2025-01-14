@@ -10,7 +10,7 @@ Errors  in this project is handled .
 - datetime
 - MongoClient from pymongo
 - database_sys ( this is my own program which I imported in main.py)
-## database_sys.py 
+## database_sys.py :sunflower:
 This is the main progaram , an OOP based Python code that provides:
 - a class fro connecting to database
 - a base person class that is going to be used as inheritance for Teacher class and Student Class since every person should have name, age and email 
@@ -22,7 +22,7 @@ This is the main progaram , an OOP based Python code that provides:
 ### any of Class,Student,Teacher and Course classes contain All the CRUD opertaion(Add,Remove,Update,Display and Search) Functions in their Class and they also got defs for checking validations of each users ID befor running the CRUD opperations to avoid mistakes
 ## SQL Database (schoool_sys.sql)
 this was coded in mysql command line to make the database and its table there fisrt and all the school datas in python code inserted there
-## main.py
+## main.py :cherry_blossom:
 This file contains the main menu code. The manu is made for easier use of the program (database_sys.py)
 - Main menu: provides 7 options and the first 5 options has their own menu with other diffrent options.
 - the menu has atleast more than 35 Options for all the operations
@@ -31,7 +31,7 @@ This file contains the main menu code. The manu is made for easier use of the pr
   data anlysis and visualizaion for school operation  
 ## CSV files :file_folder:
 in the Reporting Class made an option for generationg summery reports from each table in the database 
-## :chart_with_upwards_trend: with mongodb :chart_with_upwards_trend:
+## :leaves: with mongodb :leaves:
 this program has same functionality like the database_sys.py but made with mongoDB 
 ## System.log
 - Logging System Activities
