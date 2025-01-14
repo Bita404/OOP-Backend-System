@@ -27,7 +27,9 @@ This file contains the main menu code. The manu is made for easier use of the pr
 - Main menu: provides 7 options and the first 5 options has their own menu with other diffrent options.
 - the menu has atleast more than 35 Options for all the operations
 - Avdanced Search : helps to search with filter by anything
-## CSV files
+  ## Reporting class :chart_with_upwards_trend:
+  data anlysis and visualizaion for school operation  
+## CSV files :file_folder:
 in the Reporting Class made an option for generationg summery reports from each table in the database 
 ## with mongodb 
 this program has same functionality like the database_sys.py but made with mongoDB 
