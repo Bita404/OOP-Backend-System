@@ -3,12 +3,12 @@ This project is an OOP based backend system for managing school operations like 
 It contains all the CRUD operations for each object in the school and also contains visualization, analyzing and summery Reports to help the user.
 Errors  in this project is handled .
 ## Libraries :books:
-- mysql.connector
+- mysql.connector (requires Mysql and a database)
 - pandas 
 - matplotlib.pyplot
 - numpy
 - datetime
-- MongoClient from pymongo
+- MongoClient from pymongo  (requires mongoDBcompass)
 - database_sys ( this is my own program which I imported in main.py)
 ## database_sys.py :sunflower:
 This is the main progaram , an OOP based Python code that provides:
